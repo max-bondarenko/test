@@ -45,14 +45,33 @@
             <artifactId>akka-actor_2.10</artifactId>
             <version>2.2.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.10</artifactId>
+            <version>2.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scala-tools.testing</groupId>
+            <artifactId>specs_2.10</artifactId>
+            <version>1.6.9</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>
 
     <build>
-
-
         <sourceDirectory>src/main/scala</sourceDirectory>
+
+
         <plugins>
             <plugin>
                 <groupId>org.scala-tools</groupId>
@@ -64,6 +83,7 @@
                     <execution>
                         <goals>
                             <goal>compile</goal>
+                            <goal>testCompile</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -71,6 +91,33 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>2.16</version>
+                <configuration>
+                    <skipTests>false</skipTests>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest-maven-plugin</artifactId>
+                <version>1.0-RC1</version>
+                <configuration>
+                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                    <junitxml>.</junitxml>
+                    <filereports>WDF TestSuite.txt</filereports>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>test</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
