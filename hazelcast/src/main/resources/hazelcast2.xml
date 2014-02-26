@@ -13,7 +13,7 @@
                 <multicast-port>54327</multicast-port>
             </multicast>
             <tcp-ip enabled="true">
-                <address>10.249.141.149:5701</address>
+                <hostname>10.249.141.149</hostname>
             </tcp-ip>
             <aws enabled="false">
                 <access-key>my-access-key</access-key>
@@ -21,6 +21,9 @@
                 <region>us-east-1</region>
             </aws>
         </join>
+        <interfaces enabled="false">
+            <interface>10.249.141.149</interface>
+        </interfaces>
 
 
         <symmetric-encryption enabled="false">

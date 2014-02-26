@@ -14,8 +14,11 @@
             </multicast>
             <tcp-ip enabled="true">
                 <!--<hostname>localhost</hostname>-->
-                <address>10.249.141.149:5701</address>
+                <address>10.249.141.149</address>
                 <address>10.249.141.149:5702</address>
+                <address>10.249.141.149:5703</address>
+                <address>10.249.141.149:5704</address>
+                <address>10.249.141.149:5705</address>
             </tcp-ip>
             <aws enabled="false">
                 <access-key>my-access-key</access-key>
@@ -23,10 +26,10 @@
                 <region>us-east-1</region>
             </aws>
         </join>
-        <!--<interfaces enabled="true">-->
-            <!--<interface>127.0.0.1</interface>-->
-            <!--<interface>10.249.141.149</interface>-->
-        <!--</interfaces>-->
+        <interfaces enabled="false">
+            <interface>127.0.0.1</interface>
+            <interface>10.249.141.149</interface>
+        </interfaces>
         <symmetric-encryption enabled="false">
             <!--
                encryption algorithm such as DES/ECB/PKCS5Padding, PBEWithMD5AndDES,
