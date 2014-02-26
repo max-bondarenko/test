@@ -2,17 +2,10 @@
  * Created by mbondarenko on 17.01.14.
  */
 object VariContrvar extends App {
-
-
 }
 
 object T {
-
   val f = new F
-
-
-
-
 }
 
 
