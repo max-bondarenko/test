@@ -19,6 +19,8 @@ object SpringStarter extends App with Logging {
   private val bean: Simple = ctx.getBean("joe", classOf[Simple])
   logger.info("got bean {} ", bean)
 
+  logger.info("got list: {}" , ctx getBean "list")
+
 }
 
 

@@ -9,5 +9,8 @@ class MyConf extends FunctionalConfiguration{
   bean(name = "joe"){
     new Simple
   }
+  bean(name = "list"){
+    List[String]("lkhna;ldjf","asdlfjhasdlfs","asldfjhdkasjhfask")
+  }
 
 }
