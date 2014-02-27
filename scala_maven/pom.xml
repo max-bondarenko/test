@@ -8,11 +8,29 @@
     <artifactId>scala_maven</artifactId>
     <version>1.0.0</version>
 
+    <parent>
+        <groupId>parent</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../parent/pom.xml</relativePath>
+    </parent>
+
     <repositories>
         <repository>
             <id>scala-tools.org</id>
             <name>Scala-tools Maven2 Repository</name>
             <url>http://scala-tools.org/repo-releases</url>
+        </repository>
+        <repository>
+            <id>milestone.repo.springsource.org</id>
+            <name>repo.springsource.org-milestone</name>
+            <url>https://repo.springsource.org/libs-milestone</url>
+        </repository>
+        <repository>
+            <snapshots />
+            <id>snapshots</id>
+            <name>libs-snapshot-remote</name>
+            <url>http://repo.spring.io/libs-snapshot-remote</url>
         </repository>
     </repositories>
 
@@ -24,6 +42,45 @@
         </pluginRepository>
     </pluginRepositories>
     <dependencies>
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>3.2.5.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.scala</groupId>
+            <artifactId>spring-scala_2.10</artifactId>
+            <version>1.0.0.RC1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>scalalogging-slf4j_2.10</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-compiler</artifactId>
