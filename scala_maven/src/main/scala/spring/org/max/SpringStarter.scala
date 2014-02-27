@@ -12,10 +12,12 @@ object SpringStarter extends App with Logging {
   logger.info("Start app ")
   val ctx = FunctionalConfigApplicationContext(classOf[MyConf])
 
-  ctx.beanNamesForType[Simple](true, false).foreach(println)
+  val beansOfType = ctx.beanNamesForType[Simple](includeNonSingletons = true, allowEagerInit = false).mkString(",")
+  logger.info("get beanNamesForType [Simple] : {}", beansOfType)
+
 
   private val bean: Simple = ctx.getBean("joe", classOf[Simple])
-  println(bean)
+  logger.info("got bean {} ", bean)
 
 }
 

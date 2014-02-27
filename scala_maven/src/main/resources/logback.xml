@@ -9,6 +9,7 @@
     </appender>
 
     <logger name="org.springframework.scala" level="debug"/>
+    <logger name="org.springframework" level="info"/>
 
     <root level="debug">
         <appender-ref ref="STDOUT" />
