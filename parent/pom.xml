@@ -16,6 +16,24 @@
             <url>http://scala-tools.org/repo-releases</url>
         </pluginRepository>
     </pluginRepositories>
+    <repositories>
+        <repository>
+            <id>scala-tools.org</id>
+            <name>Scala-tools Maven2 Repository</name>
+            <url>http://scala-tools.org/repo-releases</url>
+        </repository>
+        <repository>
+            <id>milestone.repo.springsource.org</id>
+            <name>repo.springsource.org-milestone</name>
+            <url>https://repo.springsource.org/libs-milestone</url>
+        </repository>
+        <repository>
+            <snapshots/>
+            <id>snapshots</id>
+            <name>libs-snapshot-remote</name>
+            <url>http://repo.spring.io/libs-snapshot-remote</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
