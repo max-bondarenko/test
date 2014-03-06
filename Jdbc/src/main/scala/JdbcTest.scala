@@ -18,12 +18,12 @@ object JdbcTest extends App {
 
 
   val ds = new SingleConnectionDataSource(
-    "jdbc:oracle:thin:@ictu2.us.db.com:1633:NYICTU2",
-    "cem_owner",
-    "cem10wnr", false)
+    "",
+    "",
+    "", false)
 
   val t = new JdbcTemplate(ds)
 
-  t.execute("SELECT sysdate from DUAL" )
+  t.execute("SELECT sysdate from DUAL",  )
 
 }
