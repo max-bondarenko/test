@@ -1,4 +1,5 @@
-import org.springframework.jdbc.core.{PreparedStatementCallback, JdbcTemplate}
+import java.sql.{CallableStatement, PreparedStatement}
+import org.springframework.jdbc.core.{CallableStatementCallback, PreparedStatementCallback, JdbcTemplate}
 import org.springframework.jdbc.datasource.{SingleConnectionDataSource, SimpleDriverDataSource}
 
 
@@ -24,6 +25,7 @@ object JdbcTest extends App {
 
   val t = new JdbcTemplate(ds)
 
-  t.execute("SELECT sysdate from DUAL",  )
+  val s = t.queryForObject[String]("SELECT sysdate from DUAL", classOf[String])
+  println(s)
 
 }
