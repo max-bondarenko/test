@@ -18,6 +18,8 @@
 
     <logger name="org.springframework" level="info"/>
     <logger name="org.hibernate" level="info"/>
+    <logger name="org.hibernate.tool.hbm2ddl.SchemaUpdate" level="debug"/>
+
 
     <logger name="com.max" level="debug" additivity="false">
         <appender-ref ref="TEST" />

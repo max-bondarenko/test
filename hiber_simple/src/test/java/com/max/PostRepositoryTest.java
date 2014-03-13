@@ -1,20 +1,34 @@
 package com.max;
 
-import static org.junit.Assert.*;
-
-import java.util.Date;
-
+import com.max.entities.Post;
+import com.max.entities.Record;
+import com.max.repositories.IPost2Repository;
+import com.max.repositories.PostRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.omg.CORBA._PolicyStub;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.support.TransactionTemplate;
 
-import com.max.entities.Post;
-import com.max.repositories.PostRepository;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
+import javax.transaction.TransactionManager;
+import java.util.Date;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(locations="classpath:META-INF/application-context.xml")
@@ -25,6 +39,11 @@ public class PostRepositoryTest {
 
     @Autowired
     PostRepository repository;
+    @Autowired
+    IPost2Repository repository2;
+
+    @Autowired
+    PlatformTransactionManager ptm;
 
     @Test
     public void testRead() throws Exception {
@@ -48,4 +67,24 @@ public class PostRepositoryTest {
         log.info(dbpost.getTitle());
     }
 
+    @Test
+    public void testAssociation() throws Exception {
+        TransactionStatus transaction = ptm.getTransaction(new DefaultTransactionDefinition());
+        Post one = repository.findOne(1);
+        assertNotNull(one);
+        Set<Record> records = one.getRecords();
+        assertNotNull(records);
+        assertEquals(3, records.size());
+        log.debug("got some records for post_id: {} --> {}",one.getPostId(),  records);
+        ptm.rollback(transaction);
+    }
+
+    @Test
+    public void testCustomRepo() throws Exception {
+        TransactionStatus transaction = ptm.getTransaction(new DefaultTransactionDefinition());
+        Post one = repository2.getPostById(1);
+        assertEquals(3, one.getRecords().size());
+        assertNotNull(one);
+        ptm.rollback(transaction);
+    }
 }

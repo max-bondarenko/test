@@ -1,13 +1,10 @@
 package com.max.entities;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="POST")
@@ -16,13 +13,17 @@ public class Post {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="POST_ID")
-	Integer postId;
+	private Integer postId;
 	
 	@Column(name="TITLE")
-	String title;
-	
+	private String title;
+    @Temporal(TemporalType.TIMESTAMP)
 	@Column(name="POST_DATE")
-	Date postDate;
+	private Date postDate;
+
+    @OneToMany
+    @JoinColumn(name = "POST_ID")
+    private Set<Record> records;
 
 	public Integer getPostId() {
 		return postId;
@@ -48,4 +49,11 @@ public class Post {
 		this.postDate = postDate;
 	}
 
+    public Set<Record> getRecords() {
+        return records;
+    }
+
+    public void setRecords(Set<Record> records) {
+        this.records = records;
+    }
 }
