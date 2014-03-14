@@ -8,8 +8,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.List;
@@ -22,6 +24,7 @@ import static junit.framework.Assert.assertNotNull;
 @RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(locations="classpath:META-INF/application-context.xml")
 @ContextConfiguration(locations = "classpath:META-INF/test-context.xml")
+@TransactionConfiguration
 public class RecordRepoTest {
 
 
@@ -31,13 +34,14 @@ public class RecordRepoTest {
     PlatformTransactionManager ptm;
 
     @Test
+    @Transactional
     public void testRecordAndLike() throws Exception {
-        TransactionStatus transaction = ptm.getTransaction(new DefaultTransactionDefinition());
+//        TransactionStatus transaction = ptm.getTransaction(new DefaultTransactionDefinition());
         Record one = repository.findOne(1);
         assertNotNull(one);
         List<Like> likes = one.getLikes();
         assertNotNull(likes);
 
-        ptm.rollback(transaction);
+//        ptm.rollback(transaction);
     }
 }
