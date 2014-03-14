@@ -23,7 +23,7 @@ public class Post {
 
     @OneToMany
     @JoinColumn(name = "POST_ID")
-    private Set<Record> records;
+    private List<Record> records;
 
 	public Integer getPostId() {
 		return postId;
@@ -49,11 +49,11 @@ public class Post {
 		this.postDate = postDate;
 	}
 
-    public Set<Record> getRecords() {
+    public List<Record> getRecords() {
         return records;
     }
 
-    public void setRecords(Set<Record> records) {
+    public void setRecords(List<Record> records) {
         this.records = records;
     }
 }

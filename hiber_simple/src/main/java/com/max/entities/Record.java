@@ -2,9 +2,8 @@ package com.max.entities;
 
 
 
-import org.hibernate.annotations.ForeignKey;
-
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by mbondarenko on 13.03.14.
@@ -20,9 +19,13 @@ public class Record {
     @Column(name = "VALUE")
     private String value;
 
-//    @ManyToOne
-//    @JoinColumn(name = "POST_ID")
-//    private Post post;
+    @OneToMany
+    @JoinTable(
+            name ="RECORD_LIKE",
+            joinColumns = {@JoinColumn(name = "LIKE_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "RECORD__ID")}
+    )
+    private List<Like> likes;
 
     public Record() {
     }
@@ -51,6 +54,14 @@ public class Record {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    public void setLikes(List<Like> likes) {
+        this.likes = likes;
     }
 
     @Override

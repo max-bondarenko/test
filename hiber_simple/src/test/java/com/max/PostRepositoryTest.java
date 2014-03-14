@@ -1,5 +1,6 @@
 package com.max;
 
+import com.max.entities.Like;
 import com.max.entities.Post;
 import com.max.entities.Record;
 import com.max.repositories.IPost2Repository;
@@ -25,6 +26,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.TransactionManager;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -72,10 +74,15 @@ public class PostRepositoryTest {
         TransactionStatus transaction = ptm.getTransaction(new DefaultTransactionDefinition());
         Post one = repository.findOne(1);
         assertNotNull(one);
-        Set<Record> records = one.getRecords();
+        List<Record> records = one.getRecords();
         assertNotNull(records);
         assertEquals(3, records.size());
         log.debug("got some records for post_id: {} --> {}",one.getPostId(),  records);
+
+        Record record = records.get(1);
+        List<Like> likes = record.getLikes();
+        assertNotNull(likes);
+
         ptm.rollback(transaction);
     }
 
