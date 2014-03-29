@@ -17,7 +17,9 @@
     </appender>
 
     <logger name="org.hibernate" level="info"/>
+
     <logger name="org.hibernate.tool.hbm2ddl.SchemaUpdate" level="debug"/>
+    <logger name="org.hibernate.SQL" level="debug"/>
 
 
     <logger name="com.max" level="debug" additivity="false">
