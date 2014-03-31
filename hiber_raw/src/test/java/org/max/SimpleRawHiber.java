@@ -6,6 +6,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.Before;
 import org.junit.Test;
+import org.max.entity.Author;
+import org.max.entity.Book;
 
 import java.util.List;
 

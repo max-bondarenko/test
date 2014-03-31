@@ -2,11 +2,10 @@ package org.max.common;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.BootstrapServiceRegistryBuilder;
-import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
-import org.max.Author;
-import org.max.Book;
+import org.max.entity.Author;
+import org.max.entity.Book;
+import org.max.entity.Stack;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +20,6 @@ public class AppFactory {
     private Configuration cfg;
     private SessionFactory sf;
 
-
     public static AppFactory getInstance() {
         return ourInstance;
     }
@@ -29,8 +27,6 @@ public class AppFactory {
     private AppFactory() {
         Configuration cfg = new Configuration();
         cfg.configure();
-        cfg.addAnnotatedClass(Book.class);
-        cfg.addAnnotatedClass(Author.class);
         this.cfg = cfg;
     }
 

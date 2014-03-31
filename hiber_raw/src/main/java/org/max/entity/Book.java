@@ -1,4 +1,4 @@
-package org.max;
+package org.max.entity;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -95,4 +95,15 @@ public class Book {
 	public void setPublicationDate(Date publicationDate) {
 		this.publicationDate = publicationDate;
 	}
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", subtitle='" + subtitle + '\'' +
+                ", authors=" + authors +
+                ", publicationDate=" + publicationDate +
+                '}';
+    }
 }

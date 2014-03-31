@@ -1,4 +1,4 @@
-package org.max;
+package org.max.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
