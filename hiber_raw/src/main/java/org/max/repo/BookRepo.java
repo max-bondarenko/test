@@ -20,8 +20,11 @@ public class BookRepo {
         this.session = session;
     }
 
-    public Book getBook(Integer id) {
+    public Book getBookWithAllCollections(Integer id) {
         return (Book) session.get(Book.class, id);
+    }
+    public Book loadBook(Integer id) {
+        return (Book) session.load(Book.class, id);
     }
 
     public List<Book> getWithAuthor(String authorName){
@@ -31,6 +34,20 @@ public class BookRepo {
                 .list();
 
         return list;
+    }
+
+    public void detach(Book b){
+        session.evict(b);
+    }
+
+    public void delete(Book b){
+        session.delete(b);
+    }
+
+    public void delete(Integer bookId){
+        Book b = new Book();
+        b.setId(bookId);
+        session.delete(b);
     }
 
 }

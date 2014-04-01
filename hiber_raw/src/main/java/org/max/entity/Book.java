@@ -102,7 +102,7 @@ public class Book {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", subtitle='" + subtitle + '\'' +
-                ", authors=" + authors +
+
                 ", publicationDate=" + publicationDate +
                 '}';
     }

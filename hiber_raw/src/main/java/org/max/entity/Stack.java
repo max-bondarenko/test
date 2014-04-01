@@ -58,7 +58,7 @@ public class Stack {
     @Override
     public String toString() {
         return "{" + id +", '" + name + '\'' +
-                ", books=" + books +
+
                 '}';
     }
 

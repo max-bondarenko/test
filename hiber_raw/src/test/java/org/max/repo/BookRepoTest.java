@@ -6,6 +6,7 @@ import org.hamcrest.core.IsCollectionContaining;
 import org.hibernate.IdentifierLoadAccess;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.stat.Statistics;
 import org.junit.After;
 import org.junit.Before;
@@ -31,6 +32,7 @@ public class BookRepoTest {
 
     private SessionFactory sf;
     private Session session;
+    BookRepo repo;
 
     public BookRepoTest() {
         sf = AppFactory.getInstance().getSessionFactory();
@@ -39,6 +41,7 @@ public class BookRepoTest {
     @Before
     public void setUp() throws Exception {
         session = sf.openSession();
+        repo = new BookRepo(session);
     }
 
     @After
@@ -49,7 +52,7 @@ public class BookRepoTest {
     @Test
     public void testGetBook() throws Exception {
         BookRepo br = new BookRepo(session);
-        Book book = br.getBook(3);
+        Book book = br.getBookWithAllCollections(3);
         assertNotNull(book);
 
         Statistics statistics = sf.getStatistics();
@@ -100,6 +103,17 @@ public class BookRepoTest {
         Object load1 = session.byId(Stack.class).load(1);
 
         assertNotNull(load1);
-        System.out.println(load1.toString().replace(",",",\n").replace("{", "{\n"));
+        System.out.println(load1.toString().replace(",", ",\n").replace("{", "{\n"));
+    }
+
+    @Test
+    public void testLoadVSSave() throws Exception {
+        Transaction tx = session.beginTransaction();
+        Book bookWithAllCollections = repo.getBookWithAllCollections(8);
+        Book book = repo.loadBook(8);
+
+        assertSame(bookWithAllCollections,book);
+        tx.rollback();
+
     }
 }
