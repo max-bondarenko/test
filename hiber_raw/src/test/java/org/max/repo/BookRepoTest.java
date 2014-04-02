@@ -11,9 +11,11 @@ import org.hibernate.stat.Statistics;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.max.common.AppFactory;
 import org.max.entity.Book;
 import org.max.entity.Stack;
-import org.max.common.AppFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.List;
@@ -29,6 +31,8 @@ import static org.junit.Assert.*;
  * To change this template use File | Settings | File Templates.
  */
 public class BookRepoTest {
+
+    private static final Logger log = LoggerFactory.getLogger(BookRepoTest.class);
 
     private SessionFactory sf;
     private Session session;
@@ -46,7 +50,8 @@ public class BookRepoTest {
 
     @After
     public void tearDown() throws Exception {
-        session.close();
+        if (session.isOpen())
+            session.close();
     }
 
     @Test
@@ -112,8 +117,28 @@ public class BookRepoTest {
         Book bookWithAllCollections = repo.getBookWithAllCollections(8);
         Book book = repo.loadBook(8);
 
-        assertSame(bookWithAllCollections,book);
+        assertSame(bookWithAllCollections, book);
         tx.rollback();
+    }
+
+    @Test
+    public void testGet() throws Exception {
+        Book bookWithAllCollections = repo.getBookWithAllCollections(1000);
+        assertNull(bookWithAllCollections);
+    }
+
+    @Test(expected = org.hibernate.ObjectNotFoundException.class)
+    public void testLoad() throws Throwable {
+        Book bookWithAllCollections = repo.loadBook(1000);
+        assertNotNull(bookWithAllCollections);
+        try {
+
+            log.info("for newly load got id:{}", bookWithAllCollections.getId());
+            assertNotNull(bookWithAllCollections.getTitle());
+        } catch (Throwable e) {
+            log.warn("got " + e.getClass());
+            throw e;
+        }
 
     }
 }

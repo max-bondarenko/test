@@ -32,8 +32,15 @@ public class BookRepo {
                 "where  a.name = :author")
                 .setString("author",authorName)
                 .list();
-
         return list;
+    }
+
+    public Book getWithAuthor(Integer id) {
+        List<Book> list = session.createQuery("from Book as b join fetch b.authors as a " +
+                "where  a.id = :id")
+                .setInteger("id", id)
+                .list();
+        return list.get(0);
     }
 
     public void detach(Book b){

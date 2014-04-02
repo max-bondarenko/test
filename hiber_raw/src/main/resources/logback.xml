@@ -19,12 +19,16 @@
     <logger name="org.hibernate" level="info"/>
 
     <logger name="org.hibernate.tool.hbm2ddl.SchemaUpdate" level="debug"/>
-    <logger name="org.hibernate.cfg.Configuration" level="trace"/>
+    <logger name="org.hibernate.cfg.Configuration" level="info"/>
     <logger name="org.hibernate.SQL" level="debug"/>
+    <logger name="org.hibernate.type" level="debug"/>
+    <logger name="org.hibernate.type.BasicTypeRegistry" level="info"/>
+    <logger name="org.hibernate.pretty" level="trace"/>
+    <logger name="org.hibernate.jdbc" level="trace"/>
 
 
-    <logger name="com.max" level="debug" additivity="false">
-        <appender-ref ref="TEST" />
+    <logger name="org.max" level="debug" additivity="false">
+    <appender-ref ref="TEST" />
     </logger>
 
     <root level="debug">
