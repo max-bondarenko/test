@@ -1,29 +1,17 @@
 package org.max.entity;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-
 import org.apache.solr.analysis.LowerCaseFilterFactory;
 import org.apache.solr.analysis.SnowballPorterFilterFactory;
 import org.apache.solr.analysis.StandardTokenizerFactory;
+import org.hibernate.annotations.ForeignKey;
+import org.hibernate.search.annotations.*;
 
-import org.hibernate.search.annotations.Analyze;
-import org.hibernate.search.annotations.Analyzer;
-import org.hibernate.search.annotations.AnalyzerDef;
-import org.hibernate.search.annotations.DateBridge;
-import org.hibernate.search.annotations.DocumentId;
-import org.hibernate.search.annotations.Field;
-import org.hibernate.search.annotations.Indexed;
-import org.hibernate.search.annotations.IndexedEmbedded;
-import org.hibernate.search.annotations.Parameter;
-import org.hibernate.search.annotations.Resolution;
-import org.hibernate.search.annotations.Store;
-import org.hibernate.search.annotations.TokenFilterDef;
-import org.hibernate.search.annotations.TokenizerDef;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @AnalyzerDef(name = "customanalyzer",
@@ -45,7 +33,8 @@ public class Book {
 
 	@IndexedEmbedded
 	@ManyToMany
-	public Set<Author> getAuthors() {
+    @ForeignKey(name = "fk_book_id", inverseName = "fk_author_id")
+    public Set<Author> getAuthors() {
 		return authors;
 	}
 

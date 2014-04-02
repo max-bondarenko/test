@@ -1,5 +1,7 @@
 package org.max.entity;
 
+import org.hibernate.annotations.ForeignKey;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -25,11 +27,13 @@ public class Hall {
     }
 
     @ElementCollection
+    @ForeignKey(name = "fk_hall_traditional_id")
     public Set<String> getTraditionalNames() {
         return traditionalNames;
     }
 
     @OneToMany
+    @ForeignKey(name = "fk_hall_id", inverseName = "fk_line_id")
     public Set<Line> getLines() {
         return lines;
     }
