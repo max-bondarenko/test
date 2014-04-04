@@ -36,6 +36,7 @@ public class ServerTest {
                 statement.getResultSet().next();
                 assertEquals(1, statement.getResultSet().getInt(1));
             }
+            connection.close();
         } finally {
             s.stop();
         }
