@@ -37,5 +37,18 @@ public class AppFactory {
         return sf;
     }
 
+    /*
+      BootstrapServiceRegistryBuilder bsrb = new BootstrapServiceRegistryBuilder();
+            ServiceRegistryBuilder srb = new ServiceRegistryBuilder();
+            bsrb.with(new EventIntegrator());
+
+            BootstrapServiceRegistry built = srb.build();
+
+
+            srb.applySettings(cfg.getProperties());
+
+            sf = cfg.buildSessionFactory(serviceRegistry);
+     */
+
 
 }
