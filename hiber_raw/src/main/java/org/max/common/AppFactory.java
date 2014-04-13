@@ -3,9 +3,6 @@ package org.max.common;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistryBuilder;
-import org.max.entity.Author;
-import org.max.entity.Book;
-import org.max.entity.Stack;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,17 +24,31 @@ public class AppFactory {
     private AppFactory() {
         Configuration cfg = new Configuration();
         cfg.configure();
+        cfg.setInterceptor(new SimpleLoggingInterceptor());
         this.cfg = cfg;
     }
 
-    public SessionFactory getSessionFactory(){
-        ServiceRegistryBuilder srb = new ServiceRegistryBuilder();
-        srb.applySettings(cfg.getProperties());
-
-        SessionFactory sessionFactory = cfg.buildSessionFactory(srb.buildServiceRegistry());
-        return sessionFactory;
+    public SessionFactory getSessionFactory() {
+        if (sf == null) {
+            ServiceRegistryBuilder srb = new ServiceRegistryBuilder();
+            srb.applySettings(cfg.getProperties());
+            sf = cfg.buildSessionFactory(srb.buildServiceRegistry());
+        }
+        return sf;
     }
 
+    /*
+      BootstrapServiceRegistryBuilder bsrb = new BootstrapServiceRegistryBuilder();
+            ServiceRegistryBuilder srb = new ServiceRegistryBuilder();
+            bsrb.with(new EventIntegrator());
+
+            BootstrapServiceRegistry built = srb.build();
+
+
+            srb.applySettings(cfg.getProperties());
+
+            sf = cfg.buildSessionFactory(serviceRegistry);
+     */
 
 
 }
