@@ -17,6 +17,8 @@ import org.max.entity.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -140,5 +142,36 @@ public class BookRepoTest {
             throw e;
         }
 
+    }
+
+    @Test
+    public void testLoadAndSave() throws Throwable {
+        Transaction tx = session.beginTransaction();
+        Book b = repo.loadBook(1000);
+        assertNotNull(b);
+        log.info("for newly load got id:{}", b.getId());
+        log.info("contains : {}", session.contains(b));
+
+
+        DateFormat df = new SimpleDateFormat("YYYY MM DD");
+        String sourceDate = "2014 01 12";
+        String title = "test title";
+        String subtitle = "test subtitile";
+        b.setPublicationDate(df.parse(sourceDate));
+        b.setTitle(title);
+        b.setSubtitle(subtitle);
+
+        tx.commit();
+
+        session.close();
+
+        session = sf.openSession();
+
+        repo = new BookRepo(session);
+        Book b1 = repo.getBookWithAllCollections(1000);
+        assertNotNull(b1);
+        assertEquals(df.parse(sourceDate), b1.getPublicationDate());
+        assertEquals(title, b1.getTitle());
+        assertEquals(subtitle, b1.getSubtitle());
     }
 }
