@@ -1,7 +1,10 @@
 package org.max.repo;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.max.entity.Book;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -12,25 +15,28 @@ import java.util.List;
  * Time: 11:20
  * To change this template use File | Settings | File Templates.
  */
-public class BookRepo {
+public class Book2Repo {
 
-    private Session session;
+    public static final Logger log = LoggerFactory.getLogger(Book2Repo.class);
 
-    public BookRepo(Session session) {
-        this.session = session;
+    private SessionFactory sessionFactory;
+
+    public Book2Repo(SessionFactory sf) {
+        this.sessionFactory = sf;
     }
 
     public Book getBookWithAllCollections(Integer id) {
-
-        return (Book) session.get(Book.class, id);
+        Session cs = sessionFactory.getCurrentSession();
+        log.debug("session: {}", cs);
+        return (Book) cs.get(Book.class, id);
     }
 
     public Book loadBook(Integer id) {
-        return (Book) session.load(Book.class, id);
+        return (Book) sessionFactory.getCurrentSession().load(Book.class, id);
     }
 
     public List<Book> getWithAuthor(String authorName) {
-        List list = session.createQuery("from Book as b join fetch b.authors as a " +
+        List list = sessionFactory.getCurrentSession().createQuery("from Book as b join fetch b.authors as a " +
                 "where  a.name = :author")
                 .setString("author", authorName)
                 .list();
@@ -38,7 +44,7 @@ public class BookRepo {
     }
 
     public Book getWithAuthor(Integer id) {
-        List<Book> list = session.createQuery("from Book as b join fetch b.authors as a " +
+        List<Book> list = sessionFactory.getCurrentSession().createQuery("from Book as b join fetch b.authors as a " +
                 "where  a.id = :id")
                 .setInteger("id", id)
                 .list();
@@ -46,17 +52,17 @@ public class BookRepo {
     }
 
     public void detach(Book b) {
-        session.evict(b);
+        sessionFactory.getCurrentSession().evict(b);
     }
 
     public void delete(Book b) {
-        session.delete(b);
+        sessionFactory.getCurrentSession().delete(b);
     }
 
     public void delete(Integer bookId) {
         Book b = new Book();
         b.setId(bookId);
-        session.delete(b);
+        sessionFactory.getCurrentSession().delete(b);
     }
 
 }

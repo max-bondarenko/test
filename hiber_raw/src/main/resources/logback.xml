@@ -12,7 +12,7 @@
         <!-- encoders are assigned the type
              ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
         <encoder>
-            <pattern>  >>>>  %d{HH:mm:ss.SSS} %-5level %logger{30} - %msg%n </pattern>
+            <pattern>>>>>[%thread] %d{HH:mm:ss.SSS} %-5level %logger{30} - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -28,7 +28,7 @@
 
 
     <logger name="org.max" level="debug" additivity="false">
-    <appender-ref ref="TEST" />
+        <appender-ref ref="TEST"/>
     </logger>
 
     <root level="debug">
