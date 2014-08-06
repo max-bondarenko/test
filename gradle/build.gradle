@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+
 }
 
 ext {
@@ -17,27 +17,30 @@ ext {
 
 sourcesSets
 
-task processResources(task: Copy, overwrite: true) {
-    def m = project.extensions.extraProperties.properties
-    from(sourcesSets.main.java.resourcess)
-    filter {
-        String s ->
+tasks.processResources.configure {
+    outputs.upToDateWhen { false }
+    includeEmptyDirs = false
 
-            def substring = s.substring(0, s.indexOf("="))
-            if (m.containsKey(substring)) {
-                return substring + "=" + m.get(substring)
-            } else {
-                return s
+    def prop = project.getExtensions().extraProperties.properties
+
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'application.properties'
+    }
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'application.properties'
+        filter { String s ->
+            if (!s.startsWith('#') && s.indexOf('=') > 1) {
+                String key = s.substring(0, s.indexOf('=')).trim()
+                if (prop.containsKey(key)) {
+                    logger.info("key {} replacet with val:{}", key, prop.get(key))
+                    return key + "=" + prop.get(key)
+                }
             }
+            s
+        }
     }
-    into(sourcessSets.main.output.resourcess)
-
+    into(sourceSets.main.output.resourcesDir)
 }
 
-task cc {
-    def m = project.extensions.extraProperties.properties.collect { key, val ->
-        val
-    }
 
-    println m
-}
