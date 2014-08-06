@@ -5,10 +5,9 @@ import org.apache.solr.analysis.SnowballPorterFilterFactory;
 import org.apache.solr.analysis.StandardTokenizerFactory;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.search.annotations.*;
+import org.hibernate.search.annotations.Parameter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +22,10 @@ import java.util.Set;
 				})
 		})
 @Indexed
+
+@NamedQueries(value = {
+        @NamedQuery(name = "name", query = " from Book b where id > 10")
+})
 public class Book {
 
 	private Integer id;
