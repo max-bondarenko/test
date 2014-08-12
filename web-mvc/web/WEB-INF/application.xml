@@ -9,4 +9,6 @@
 
     <context:component-scan base-package="com.max.mvc"/>
 
+    <bean id="jsonConv" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+
 </beans>
