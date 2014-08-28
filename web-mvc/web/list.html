@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<style>
+
+</style>
+<script>
+    var M = {};
+    M.textRx = /[\d\w]+/;
+    M.isText = function (el) {
+        if (typeof el === 'string') {
+            var r = M.textRx;
+            return r.test(el);
+        }
+        return false;
+    };
+    M.findEl = function (el) {
+        for (var i = 0; i < el.children.length; i++) {
+            var e = el.children[i];
+            if (e.hasAttribute('data-list')) {
+                return  e;
+            }
+        }
+        return el;
+    };
+    M.spannify = function (el) {
+        var self = this;
+
+        function allowedElement(obj) {
+            return obj.tagName === 'LI' || obj.tagName === 'UL';
+        }
+
+        var fu = function (el) {
+            if (el.childNodes.length > 0) {
+                if (el.children.length > 0) {
+                    for (var i = 0; i < el.children.length; i++) {
+                        var obj = el.children[i];
+                        if (allowedElement(obj)) {
+                            fu(obj);
+                        }
+                    }
+                }
+                if (el.firstChild
+                        && el.firstChild.nodeType == 3
+                        && M.isText(el.firstChild.nodeValue)) {
+                    var sp = document.createElement('span');
+                    el.insertBefore(sp, el.firstChild);
+                    sp.appendChild(sp.nextSibling)
+                }
+            }
+        };
+        fu(el);
+    };
+    M.doOnClick = function (el, func) {
+        el.onclick = function (ev) {
+            var e = ev || window.event;
+            var target = e.target || e.srcElement;
+            if (target.tagName !== 'SPAN') {
+                return;
+            }
+            if (func) {
+                func(target);
+            }
+
+            var li = target.parentNode;
+            var n = li.getElementsByTagName('ul')[0];
+            if (!n) {
+                return;
+            }
+            n.style.display = n.style.display ? '' : 'none';
+        };
+    };
+
+    function Menu(el) {
+        var self = this;
+        var self_el = el;
+
+        function defaultOnCLick() {
+            self_el.style.backgroundColor = self_el.style.backgroundColor ? '' : 'green';
+        }
+
+        if (typeof el === 'object' && el.tagName === 'UL') {
+            this.onClick = defaultOnCLick;
+            if (el.hasAttribute('data-list')) {
+                M.spannify(el);
+                M.doOnClick(el, function (t) {
+                    self.onClick(t);
+                });
+                el.setAttribute('data-menu', 'true');
+                this.binded = true;
+            }
+        }
+
+        return this;
+    }
+
+
+</script>
+<body>
+<div style="display: block; width: 300px; height: 300px; background-color: grey"
+     onclick="men.onClick=function(t){
+       t.style.backgroundColor =  t.style.backgroundColor ? '':'black';
+       }">
+    <ul id="o" data-list="list">otherList
+        <li>00</li>
+        <li>67</li>
+        <li>asdfds
+            <ul>asdsa
+                <li>aaaa</li>
+                <li>bbbb</li>
+            </ul>
+
+        </li>
+    </ul>
+
+</div>
+
+<ul data-list="list">
+    <li>1</li>
+    <li>2</li>
+    <li>3
+        <ul>
+            <li>31</li>
+            <li>32</li>
+            <li>33
+                <ul>
+                    <li>331</li>
+                    <li>332</li>
+                    <li>333</li>
+                </ul>
+            </li>
+            <li>34</li>
+        </ul>
+    </li>
+</ul>
+
+
+</body>
+<script>
+    var el = M.findEl(document.body);
+    var men = new Menu(el);
+    men.onClick = function (t) {
+        t.style.backgroundColor = t.style.backgroundColor ? '' : 'red';
+    };
+
+    var men2 = new Menu(document.getElementById('o'))
+
+</script>
+</html>
