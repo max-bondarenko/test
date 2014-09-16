@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<style>
+
+</style>
+<script src="js/list.js"></script>
+<script src="js/json.js"></script>
+<body>
+<div style="display: block; width: 300px; height: 300px; background-color: grey">
+<ul id="o" data-list="list">otherList
+        <li>00</li>
+        <li>67</li>
+        <li>asdfds
+            <ul>asdsa
+                <li>aaaa</li>
+                <li>bbbb</li>
+            </ul>
+
+        </li>
+    </ul>
+
+</div>
+
+<div id="ch_json_builder" style="display: block; width: 100px; height: 100px;">
+
+</div>
+
+<ul data-list="list">
+    <li>1</li>
+    <li>2</li>
+    <li>3
+        <ul>
+            <li>31</li>
+            <li>32</li>
+            <li>33
+                <ul>
+                    <li>331</li>
+                    <li>332</li>
+                    <li>333</li>
+                </ul>
+            </li>
+            <li>34</li>
+        </ul>
+    </li>
+</ul>
+
+
+</body>
+<script>
+    var el = M.findEl(document.body);
+    var men = new Menu(el);
+    men.onClick = function (t) {
+        t.style.backgroundColor = t.style.backgroundColor ? '' : 'red';
+    };
+
+    var men2 = new Menu(document.getElementById('o'))
+
+
+</script>
+</html>

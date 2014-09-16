@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<script src="js/json.js"></script>
+<body>
+
+<div id="1" style="background: #B0DEEE">
+    loren ipsum doleren sit amet.
+</div>
+
+<div id="2" style="background: #B0DEEE">
+    loren ipsum doleren sit amet.
+</div>
+
+<div id="3" style=" background: #B0DEEE; display: block">
+    loren ipsum doleren sit amet.
+</div>
+
+</body>
+<script>
+    var elMenu = new menu.ElMenu(testObj, document.getElementById('1'));
+    elMenu.onClick = function (t, id) {
+        alert(id);
+    };
+
+    var m2 = new menu.ElMenu(testObj2, document.getElementById('3'))
+    m2.onClick = function (t, d) {
+        t.style.backgroundColor = t.style.backgroundColor ? '' : 'red';
+        alert(t + d + ' ')
+    }
+
+    var m3 = new menu.ElMenu(testObj3, document.getElementById('2'));
+    m3.onClick = function (t, d) {
+        t.style.backgroundColor = t.style.backgroundColor ? '' : 'red';
+        alert(d + ' ')
+    }
+</script>
+</html>
