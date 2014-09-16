@@ -3,15 +3,14 @@ package org.max.repo;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.core.IsCollectionContaining;
-import org.hibernate.IdentifierLoadAccess;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.stat.Statistics;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.max.common.AppFactory;
+import org.max.common.SimpleLoggingInterceptor;
 import org.max.entity.Book;
 import org.max.entity.Stack;
 import org.slf4j.Logger;
@@ -31,13 +30,20 @@ import static org.junit.Assert.*;
 
 public class Book2RepoTest {
 
-    private static final Logger log = LoggerFactory.getLogger(BookRepoTest.class);
+    private static final Logger log = LoggerFactory.getLogger(Book2RepoTest.class);
 
     private SessionFactory sf;
     private Session session;
     Book2Repo repo;
 
     public Book2RepoTest() {
+        Configuration cfg = new Configuration();
+        cfg.setProperty("hibernate.current_session_context_class", "thread");
+        cfg.configure();
+
+        cfg.setInterceptor(new SimpleLoggingInterceptor());
+
+
         sf = AppFactory.getInstance().getSessionFactory();
         repo = new Book2Repo(sf);
     }
@@ -55,20 +61,20 @@ public class Book2RepoTest {
 
     @Test
     public void testGetBook() throws Exception {
-        Transaction transaction = session.beginTransaction();
+
         log.debug("sess {}", session);
         Book book = repo.getBookWithAllCollections(3);
         assertNotNull(book);
 
         Statistics statistics = sf.getStatistics();
         System.out.println(statistics.toString().replace(",", "\n"));
-        transaction.rollback();
+
     }
 
     @Test
     public void testGetByAuthor() throws Exception {
-        BookRepo r = new BookRepo(session);
-        List<Book> withAuthor = r.getWithAuthor("Chad Fowler");
+        session.beginTransaction();
+        List<Book> withAuthor = repo.getWithAuthor("Chad Fowler");
 
         assertNotNull(withAuthor);
         assertEquals(2, withAuthor.size());
@@ -143,34 +149,65 @@ public class Book2RepoTest {
 
     }
 
+    @Test(expected = org.hibernate.HibernateException.class)
+    public void testLoadWithoutTx() throws Exception {
+        Book b = repo.loadBook(38);
+        assertNotNull(b);
+    }
+
     @Test
-    public void testLoadAndSave() throws Throwable {
+    public void testLoadWithTx() throws Throwable {
         Transaction tx = session.beginTransaction();
-        Book b = repo.loadBook(1000);
+        Book b = repo.loadBook(38);
         assertNotNull(b);
         log.info("for newly load got id:{}", b.getId());
         log.info("contains : {}", session.contains(b));
+    }
 
+    @Test(expected = org.hibernate.HibernateException.class)
+    public void testLoadAndSaveWithoutTx() throws Exception {
+        Transaction tx = session.beginTransaction();
+        Book b = repo.getBookWithAllCollections(1000);
+        assertNull(b);
+        log.info("contains : {}", session.contains(b));
 
         DateFormat df = new SimpleDateFormat("YYYY MM DD");
         String sourceDate = "2014 01 12";
         String title = "test title";
         String subtitle = "test subtitile";
+        b = new Book();
         b.setPublicationDate(df.parse(sourceDate));
         b.setTitle(title);
         b.setSubtitle(subtitle);
-
         tx.commit();
 
-        session.close();
-
-        session = sf.openSession();
-
-//        repo = new BookRepo(session);
-        Book b1 = repo.getBookWithAllCollections(1000);
+        Book b1 = repo.getBookWithAllCollections(b.getId());
         assertNotNull(b1);
         assertEquals(df.parse(sourceDate), b1.getPublicationDate());
         assertEquals(title, b1.getTitle());
         assertEquals(subtitle, b1.getSubtitle());
+
+    }
+
+    @Test(expected = org.hibernate.SessionException.class)
+    public void testLoadAndSaveWithTx() throws Exception {
+        Transaction tx = session.beginTransaction();
+        Book b = repo.getBookWithAllCollections(1000);
+        assertNull(b);
+        log.info("contains : {}", session.contains(b));
+
+        DateFormat df = new SimpleDateFormat("YYYY MM DD");
+        String sourceDate = "2014 01 12";
+        String title = "test title";
+        String subtitle = "test subtitile";
+        b = new Book();
+        b.setPublicationDate(df.parse(sourceDate));
+        b.setTitle(title);
+        b.setSubtitle(subtitle);
+        tx.commit();
+
+        session.beginTransaction();
+
+
     }
 }

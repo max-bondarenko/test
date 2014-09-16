@@ -21,6 +21,7 @@ public class SimpleController {
         ret.name = "Test 1 name";
         ret.ch = new ArrayList<>(3);
         ret.ch.add(new JavaDto("ch 1", 10L, null));
+        ret.ch.add(new JavaDto("ch 2", 11L, null));
         ret.id = 1L;
         return ret;
     }

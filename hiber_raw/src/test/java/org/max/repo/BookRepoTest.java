@@ -110,7 +110,7 @@ public class BookRepoTest {
         Object load1 = session.byId(Stack.class).load(1);
 
         assertNotNull(load1);
-        System.out.println(load1.toString().replace(",", ",\n").replace("{", "{\n"));
+        log.info(load1.toString().replace(",", ",\n").replace("{", "{\n"));
     }
 
     @Test
@@ -147,11 +147,10 @@ public class BookRepoTest {
     @Test
     public void testLoadAndSave() throws Throwable {
         Transaction tx = session.beginTransaction();
-        Book b = repo.loadBook(1000);
-        assertNotNull(b);
-        log.info("for newly load got id:{}", b.getId());
-        log.info("contains : {}", session.contains(b));
+        Book b = repo.getBook(1000);
+        assertNull(b);
 
+        b = repo.loadBook(33);
 
         DateFormat df = new SimpleDateFormat("YYYY MM DD");
         String sourceDate = "2014 01 12";
@@ -168,7 +167,7 @@ public class BookRepoTest {
         session = sf.openSession();
 
         repo = new BookRepo(session);
-        Book b1 = repo.getBookWithAllCollections(1000);
+        Book b1 = repo.getBookWithAllCollections(33);
         assertNotNull(b1);
         assertEquals(df.parse(sourceDate), b1.getPublicationDate());
         assertEquals(title, b1.getTitle());

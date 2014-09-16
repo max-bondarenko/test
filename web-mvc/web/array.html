@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<style>
+    div ul {
+        color: red;
+    }
+</style>
+<body>
+
+
+</body>
+<script src="js/underscore.js"></script>
+<!--<script src="js/jq.js"></script>-->
+<script type="text/html" class="template">
+    <li
+            data-uid="<%=id%>"><span><%=name%></span></li></script>
+
+<script>
+    var arr = ['item 1', 'item 2', 'item 3'];
+    var list = '<ul><li>' + arr.join('</li><li>') + '</li></ul>';
+    var div = document.createElement('div');
+
+    var ar2 = [
+        {id: '1', name: 'one '},
+        {id: '2', name: 'two'},
+        {id: '3', name: 'three'},
+        {id: '4', name: 'four'}
+    ];
+    div.innerHTML = list;
+    document.body.appendChild(div);
+
+    var temp = document.getElementsByClassName('template');
+    if (!!temp) {
+        temp = temp[0].innerHTML;
+        var template = _.template(temp);
+        var newChild = document.createElement('ul');
+        var inner = '';
+        for (var i = 0; i < ar2.length; i++) {
+            inner += template(ar2[i]);
+        }
+        newChild.innerHTML = inner;
+        document.body.appendChild(newChild)
+
+    }
+</script>
+
+</html>
