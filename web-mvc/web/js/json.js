@@ -223,7 +223,7 @@ var menu = (function () {
 
     function addMenuAttr(el) {
         el.setAttribute(ATTR_DATA_LIST, 'menu');
-    };
+    }
 
     function ElMenu(obj, elToInsert) {
         var canInsert = elToInsert && elToInsert.nodeType && elToInsert.nodeType == 1;
@@ -237,8 +237,8 @@ var menu = (function () {
         this.onClick = '';
 
         if (obj && typeof obj === 'object') {
-            var isArray = Array.isArray(obj);
-            var isHasOnlyChildren = !obj.id && !!obj.ch && Array.isArray(obj.ch) && obj.ch.length > 0;
+            var isArray = obj.length && obj.slice;
+            var isHasOnlyChildren = !obj.id && !!obj.ch && obj.ch.length && obj.ch.length > 0;
             var ul = createElement('ul');
             this.rootUL = ul;
             addMenuAttr(ul);
