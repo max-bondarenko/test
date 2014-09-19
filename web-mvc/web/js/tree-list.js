@@ -2,312 +2,323 @@
  * Created by mbondarenko on 17.09.2014.
  */
 /**
- *    usage : <p/>
- *    var t = new List({
-            url: 'REGULATOR',
-            baseUrl: 'http://localhost/page/taxonomy/',
-            rootElement: $('#userPrefsModel  div[tree-list="1"]')
-        });
- t.change = function(e){
-            //do work
-        }
- * @param sett
- * @returns {{self: List, render: _render, selected: number, change: onChange}}
- * @constructor
+ * example : <p/>
+ *  var t = new ListTree({
+ *           url: 'poi',
+ *           baseUrl: 'http://localhost/',
+ *           rootElement: $('#userPrefsModel  div[tree-list="1"]')
+ *       });
+ *          t.onChange = function(e){
+ *           //do work
+ *       }
+
+ * @param sett : settings
+ * @returns {{reRender: reRender, filter: filter, fetchNewData: fetchNewData, selected: number, onChange: undefined}}
  */
-function List(sett) {
-    var self = this;
+function ListTree(sett) {
     var settings = $.extend({
         //concrete url for data
         url: '',
         //base url of REST
-        baseUrl: '',
-        //element to attach this List
+        baseUrl: 'taxonomy/',
+        //element to attach this list
         rootElement: '',
-        // template of row
-        templateText: '<li data-uid="-1" data-name="-"><div><label>&mdash;</label></div></li> ' +
-            '<% _.each(list, function (d) { %>' +
-            '  <li data-uid="<%=d.id%>" data-name="<%=d.name%>">' +
-            '   <div tabindex="-1"><label><%=d.name%></label></div>' +
-            '</li> ' +
-            '<% });%>',
-        //template of dropdowns main div
-        divTemplate: '<div class="list dropdown">' +
-            '<div data-toggle="dropdown" class="" ><label uid="name">&mdash;</label></div> ' +
-            '<ul class="dropdown-menu" role="menu" ></ul>' +
-            '</div>'
+        //empty el
+        emptyElName: '-',
+        emptyValue: '',
+        //is show nodes collapsed when generating
+        showCollapsed: false,
+        //does need search
+        //adds input and behavior
+        hasSearch: false,
+        //as tree or only firs level tree
+        parseChildren: true,
+        attachedInput: undefined
+
     }, sett);
-    //for prod use ''
-    var forUserFriendly = '';
-    //list of allowed tags in list
-    var isAllowedTag = function (target) {
-        return target === 'LABEL' || target === 'DIV' || target === 'LI' || target === "UL";
-    };
+    if (_.isEmpty(settings.rootElement) || !_.isObject(settings.rootElement)) {
+        throw new Error('no element set');
+    }
     //controller
     var ctrl = {
         //Get data by base url + additional url params
         _getData: function (dataUrl) {
-            $.getJSON(settings.baseUrl + settings.url, function (data) {
-                model = data;
-                view._render();
-            })
+            //roller can be added here
+            $.getJSON(
+                    settings.baseUrl + (_.isUndefined(dataUrl) ? settings.url : dataUrl)
+                , function (data) {
+                    model = data;
+                    view._render();
+                    ctrl.changeFace(view._findSelected(ctrl.getAttachedVal()));
+                })
         },
-
-        getData: function () {
-            ctrl._getData(settings.url);
-        },
-
         init: function () {
+            if (settings.hasSearch) {
+                //change filter strategy here
+                ctrl.filter = settings.parseChildren
+                    ? ctrl._filter(ctrl._filterByNameInLiefs)
+                    : ctrl._filter(ctrl._filterOnlyFirstLevel);
+            }
+            if (!settings.attachedInput) {
+                var attribute = settings.rootElement.attr('tree-list');
+                if (attribute)
+                    settings.attachedInput = $('#' + attribute)
+
+            }
             view.init();
-            ctrl.getData();
+            ctrl._getData();
         },
-
-        getRoot: function () {
-            return view.ul;
+        getAttachedVal: function () {
+            return settings.attachedInput.val();
         },
-
-        doOnClick: function (ev) {
-            var e = ev || window.event;
-            var target = e.target || e.srcElement;
-            if (!isAllowedTag(target.tagName)) {
-                return;
-            }
-
-            var $parent;
-            //dirty hack. user can click on label or on her parent div
-            if (target.tagName === 'LABEL') {
-                $parent = $(target).parent().parent();
-            } else {
-                $parent = $(target).parent();
-            }
-            //change label
-            view._setSelected($parent);
-            view._changeFaceLabel($parent.attr('data-name'));
-            var selectedValue = $parent.attr('data-uid');
-            if (selectedId != selectedValue)
-                ctrl.onChange(selectedValue);
-            selectedId = selectedValue;
-            //log if presented
-            if (console) {
-                console.log('selected ' + selectedValue)
-            }
-        },
-
-
-        onChange: function (id) {
-            api.change(id);
-        }
-    };
-    //view
-    var view = {
-        //generator
-        templater: _.template(settings.templateText),
-        ul: 'content list ',
-        face: ' name of component',
-        dropdown: 'div that is dropdown',
-        _render: function () {
-            ctrl.getRoot().html(view.templater({list: model}));
-        },
-        _changeFaceLabel: function (val) {
-            view.face.text(val)
-        },
-        _setSelected: function (el) {
-            view.ul.find('li').removeClass('selected');
-            el.addClass('selected');
-
-        },
-        init: function () {
-            settings.rootElement.append($.parseHTML(settings.divTemplate));
-            this.ul = $('ul.dropdown-menu', settings.rootElement);
-            this.face = $('label[uid="name"]', settings.rootElement);
-            this.dropdown = $('div.dropdown', settings.rootElement);
-            //init bootstrap dropdown
-            $('div[data-toggle="dropdown"]', settings.rootElement).dropdown();
-            //on click behavior
-            this.ul.on('click', ctrl.doOnClick)
-        }
-    };
-
-    var model = {};
-    //default selected value
-    var selectedId = -1;
-
-    ctrl.init();
-
-    var api = {
-        self: self,
-        render: function () {
-            view._render();
-        },
-        selected: selectedId,
-        change: ctrl.onChange
-    };
-    return api;
-}
-
-
-function SearchList(sett) {
-    var self = this;
-    var settings = $.extend({
-        //concrete url for data
-        url: '',
-        //base url of REST
-        baseUrl: '',
-        //element to attach this List
-        rootElement: '',
-        // template of row
-        templateText: '<li data-uid="-1" data-name="-"><div><label>&dash;</label></div></li> ' +
-            '<% _.each(list, function (d) { %>' +
-            '  <li data-uid="<%=d.id%>" data-name="<%=d.name%>">' +
-            '   <div tabindex="-1"><label><%=d.name%></label></div>' +
-            '</li> ' +
-            '<% });%>',
-        //template of dropdowns main div
-        divTemplate: '<div class="search-list dropdown">' +
-            '<div data-toggle="dropdown" class="" ><label uid="name">&dash;</label></div> ' +
-            '<div class="dropdown-menu"> ' +
-            '<label><input class="form-control" type="text" /></label>' +
-            '<ul  role="menu" ></ul></div>' +
-            '</div>'
-    }, sett);
-    //for prod use ''
-    var forUserFriendly = '';
-    //list of allowed tags in list
-    var isAllowedTag = function (target) {
-        return target === 'LABEL' || target === 'DIV' || target === 'LI' || target === "UL";
-    };
-    //controller
-    var ctrl = {
-        //Get data by base url + additional url params
-        _getData: function (dataUrl) {
-            $.getJSON(settings.baseUrl + settings.url, function (data) {
-                model = data;
-                view._render();
-            })
-        },
-
-        getData: function () {
-            ctrl._getData(settings.url);
-        },
-
-        init: function () {
-            view.init();
-            ctrl.getData();
-        },
-
         getRoot: function () {
             return view.ul;
         },
         filter: function (input) {
-            var st = model;
-            input = input || '';
-            input = input.toLowerCase();
-            var filtered = _.filter(st, function (el) {
-                if (el.name === 'undefined') {
-                    return false;
-                }
-                return  (el.name.toLowerCase().search(input) > -1);
-            });
-            view._render(filtered);
         },
+        _comparator: function (elName, search) {
+            if (_.isUndefined(elName) || _.isUndefined(search)) return false;
+            return elName.toLowerCase().search(search) > -1;
+        },
+        _filterOnlyFirstLevel: function (src, searchString) {
+            return _.filter(src, function (el) {
+                return  ctrl._comparator(el.name, searchString);
+            });
+        },
+        _filterByNameInLiefs: function (src, searchStr) {
+            function rec(e) {
+                var r ,
+                    retE,
+                    i;
+                var item;
+                if (e.children && e.children.length > 0) {
+                    r = [];
+                    for (i = 0; i < e.children.length; i++) {
+                        item = rec(e.children[i]);
+                        if (!_.isNull(item)) {
+                            r.push(item)
+                        }
+                    }
 
-        doOnClick: function (ev) {
-            var e = ev || window.event;
-            var target = e.target || e.srcElement;
-            if (!isAllowedTag(target.tagName)) {
-                return;
+                    if (r.length > 0) {
+                        retE = {};
+                        retE.children = r;
+                        retE.id = e.id;
+                        retE.name = e.name;
+                        return retE;
+                    }
+                } else {
+                    if (ctrl._comparator(e.name, searchStr)) {
+                        return e;
+                    }
+                }
+                return null;
             }
 
-            var $parent;
-            //dirty hack. user can click on label or on her parent div
-            if (target.tagName === 'LABEL') {
-                $parent = $(target).parent().parent();
-            } else {
-                $parent = $(target).parent();
+            var ret = [];
+            var item;
+            for (var i = 0; i < src.length; i++) {
+                item = rec(src[i]);
+                if (!_.isNull(item))
+                    ret.push(item);
             }
+            return ret;
+        },
+        _filter: function (filterStrategy) {
+            return function (input) {
+                var sourceModel = model;
+                input = input || '';
+                input = input.toLowerCase();
+
+                var filtered = filterStrategy(sourceModel, input);
+                view._render(filtered);
+            }
+        },
+        changeFace: function (target) {
+            var $div = $(target);
             //change label
-            view._setSelected($parent);
-            view._changeFaceLabel($parent.attr('data-name'));
-            var selectedValue = $parent.attr('data-uid');
-            if (selectedId != selectedValue)
+            view._setSelected($div.parent());
+            view._changeFaceLabel($div.attr('data-name'));
+            var selectedValue = $div.attr('data-uid');
+            if (selectedId != selectedValue) {
+                selectedId = selectedValue;
                 ctrl.onChange(selectedValue);
-            selectedId = selectedValue;
+            }
             //log if presented
             if (console) {
                 console.log('selected ' + selectedValue)
             }
         },
+        clear: function () {
+            ctrl.changeFace(view.first());
+        },
+        doOnClick: function (ev) {
+            var e = ev || window.event;
+            var target = e.target || e.srcElement;
+            var name = target.tagName;
+
+            if (!(name === 'LABEL'
+                || name === 'DIV')) {
+                return false;
+            }
+            //dirty hack. user can click on label or on her parent div
+            if (name === 'LABEL')
+                target = target.parentNode;
+            //open/close children
+            if (!target.hasAttribute('data-uid')) {
+                view.openCloseChildren(target);
+                return false;
+            }
+            ctrl.changeFace(target);
+        },
         doShowHide: function (ev) {
             var e = ev || window.event;
             var target = e.target || e.srcElement;
-            //ignore on input
-            if (target.tagName === 'INPUT') {
+            var name = target.tagName;
+            //ignore on input or arrow or empty space in list
+            if (name === 'INPUT'
+                || name === 'SPAN'
+                || name === 'UL') {
                 return false;
             }
-            if (view.dropdown.hasClass('open')) {
+
+            if (view.dDownVisible()) {
                 view.hideDDown();
-            }
-            else {
+            } else {
                 view.showDDown();
             }
-
         },
         doOnInput: function (ev) {
             var val = view.input.val();
-            if (val === '') {
-                view._render();
+            var timer;
+            //do delay on input
+            if (timer) {
+                clearTimeout(timer);
             }
-            ctrl.filter(val);
-
-            if (console) {
-                console.log('val ' + val);
-            }
+            timer = setTimeout(function () {
+                if (val === '') {
+                    view._render();
+                }
+                ctrl.filter(val);
+            }, 350);
+            //end do delay on input
         },
-        //on change selected value
         onChange: function (id) {
-            api.change(id);
+            if (api.onChange)
+                api.onChange(id);
+            if (settings.attachedInput)
+                settings.attachedInput.val(id);
+        },
+        preventSubmitOnInput: function (ev) {
+            ev = ev || window.event;
+            var code = ev.keyCode || ev.which;
+            if (code == 13) {
+                ev.preventDefault();
+                return false;
+            }
         }
     };
     //view
     var view = {
-        //generator
-        templater: _.template(settings.templateText),
+        emptyTmpl: _.template('<li class="selected" ><div first data-uid="' + settings.emptyValue + '" data-name="<%=obj%>"><label><%=obj%></label></div></li>'),
+        noChildrenTmpl: _.template('<li><div data-uid="<%=d.id%>" data-name="<%=d.name%>" tabindex="-1"><label><%=d.name%></label></div></li>'),
+        hasChidrenTmpl: _.template(
+                '<li class="has-child ' + (settings.showCollapsed ? 'child-hidden' : '') + '">' +
+                '<div tabindex="-1" data-uid="<%=d.id%>" data-name="<%=d.name%>" >' +
+                '<div class="arrow left">' +
+                '   <span></span>' +
+                '</div>' +
+                '<label><%=d.name%></label>' +
+                '</div>' +
+                '<ul><% _.each(children,function(child){%><%=child%><%}); %></ul>' +
+                '</li>'
+        ),
+        //template of drop-downs main div
+        divTemplate: '<div class="search-tree-list dropdown">' +
+            '<div data-toggle="dropdown"><label uid="name">' + settings.emptyElName + '</label></div>' +
+            '<div class="dropdown-menu"> ' +
+            (settings.hasSearch ? '<label><input class="form-control" type="text"/></label>' : '' ) +
+            '<div>' +
+            '<ul role="menu"></ul>' +
+            '</div>' +
+            '</div>' +
+            '</div>',
+        //control structures
         ul: 'content list ',
         face: ' name of component',
         dropdown: 'div that is dropdown',
-        input: 'input',
+        first: function () {
+            return $('div[first]', view.ul);
+        },
+        //functions
         _render: function (newModel) {
-            if (newModel && _.isArray(newModel)) {
-                ctrl.getRoot().html(view.templater({list: newModel}));
-            } else {
-                ctrl.getRoot().html(view.templater({list: model}));
+            var arr;
+
+            function recursion(m) {
+                var i;
+                var s = [];
+                _.each(m, function (el) {
+                    if (settings.parseChildren && el.children && el.children.length > 0) {
+                        s.push(view.hasChidrenTmpl({d: el, children: recursion(el.children)}));
+                    } else {
+                        // no children
+                        s.push(view.noChildrenTmpl({d: el}));
+                    }
+                });
+                return s;
             }
+
+            arr = recursion(newModel ? newModel : model);
+            arr.unshift(view.emptyTmpl(settings.emptyElName));
+            ctrl.getRoot().html(arr.join(""));
         },
         _changeFaceLabel: function (val) {
             view.face.text(val)
         },
-        _setSelected: function (el) {
+        _setSelected: function ($el) {
             view.ul.find('li').removeClass('selected');
-            el.addClass('selected');
+            $el.addClass('selected');
 
+        },
+        _findSelected: function (dataUid) {
+            return $('div[data-uid="' + dataUid + '"]', view.ul);
+        },
+        dDownVisible: function () {
+            return view.dropdown.hasClass('open')
         },
         hideDDown: function () {
             settings.rootElement.removeClass('open')
-            view.input.attr('disabled', 'disabled');
+            if (settings.hasSearch)
+                view.input.attr('disabled', 'disabled');
         },
         showDDown: function () {
             settings.rootElement.addClass('open');
-            view.input.removeAttr('disabled');
+            if (settings.hasSearch)
+                view.input.removeAttr('disabled');
         },
+        //arrow rolled by css styles
+        openCloseChildren: function (div) {
+            var $li = $(div.parentNode.parentNode);
+            var $div = $(div);
+            if ($li.hasClass('child-hidden')) {
+                $li.removeClass('child-hidden')
+            } else {
+                $li.addClass('child-hidden');
+            }
+        },
+        //init
         init: function () {
-            settings.rootElement.append($.parseHTML(settings.divTemplate));
+            settings.rootElement.append($.parseHTML(view.divTemplate));
             view.ul = $('ul[role="menu"]', settings.rootElement);
             view.face = $('label[uid="name"]', settings.rootElement);
             view.dropdown = $('div.dropdown', settings.rootElement);
-            view.input = $('input', settings.rootElement);
+            if (settings.hasSearch) {
+                view.input = $('input', settings.rootElement);
+                //on click behavior
+                view.input.on('keyup', ctrl.doOnInput);
 
-            //on click behavior
-            view.input.on('keyup', ctrl.doOnInput);
+                view.input.on('keydown', ctrl.preventSubmitOnInput);
+            }
             view.dropdown.on('click', ctrl.doShowHide);
             view.ul.on('click', ctrl.doOnClick)
         }
@@ -320,143 +331,32 @@ function SearchList(sett) {
     ctrl.init();
 
     var api = {
-        self: self,
-        render: function () {
+        //redraw current model
+        reRender: function () {
             view._render();
         },
+        clear: function () {
+            ctrl.clear();
+        },
+        //filter by given string
+        filter: function (s) {
+            var srch = s || '';
+            ctrl.filter(srch);
+        },
+        //get new data from server
+        //use empty string if U needs just to refetch
+        // by current ulr
+        fetchNewData: function (newDataUrl) {
+            if (newDataUrl && newDataUrl.search) {  //is string
+                settings.url = newDataUrl;
+            }
+            ctrl._getData();
+        },
+        //get currently selected id
+        //if no selection returns -1
         selected: selectedId,
-        change: ctrl.onChange
-    };
-    return api;
-}
-
-
-function ListTree(sett) {
-    var self = this;
-    var settings = $.extend({
-        //concrete url for data
-        url: '',
-        //base url of REST
-        baseUrl: '',
-        //element to attach this List
-        rootElement: '',
-        // template of row
-        templateText: '<li data-uid="-1" data-name="-"><div><label>&mdash;</label></div></li> ' +
-            '<% _.each(list, function (d) { %>' +
-            '  <li data-uid="<%=d.id%>" data-name="<%=d.name%>">' +
-            '   <div tabindex="-1"><label><%=d.name%></label></div>' +
-            '</li> ' +
-            '<% });%>',
-        //template of dropdowns main div
-        divTemplate: '<div class="search-tree-list dropdown">' +
-            '<div data-toggle="dropdown" class="" ><label uid="name">&mdash;</label></div> ' +
-            '<ul class="dropdown-menu" role="menu" ></ul>' +
-            '</div>'
-    }, sett);
-    //for prod use ''
-    var forUserFriendly = '';
-    //list of allowed tags in list
-    var isAllowedTag = function (target) {
-        return target === 'LABEL' || target === 'DIV' || target === 'LI' || target === "UL";
-    };
-    //controller
-    var ctrl = {
-        //Get data by base url + additional url params
-        _getData: function (dataUrl) {
-            $.getJSON(settings.baseUrl + settings.url, function (data) {
-                model = data;
-                view._render();
-            })
-        },
-
-        getData: function () {
-            ctrl._getData(settings.url);
-        },
-
-        init: function () {
-            view.init();
-            ctrl.getData();
-        },
-
-        getRoot: function () {
-            return view.ul;
-        },
-
-        doOnClick: function (ev) {
-            var e = ev || window.event;
-            var target = e.target || e.srcElement;
-            if (!isAllowedTag(target.tagName)) {
-                return;
-            }
-
-            var $parent;
-            //dirty hack. user can click on label or on her parent div
-            if (target.tagName === 'LABEL') {
-                $parent = $(target).parent().parent();
-            } else {
-                $parent = $(target).parent();
-            }
-            //change label
-            view._setSelected($parent);
-            view._changeFaceLabel($parent.attr('data-name'));
-            var selectedValue = $parent.attr('data-uid');
-            if (selectedId != selectedValue)
-                ctrl.onChange(selectedValue);
-            selectedId = selectedValue;
-            //log if presented
-            if (console) {
-                console.log('selected ' + selectedValue)
-            }
-        },
-
-
-        onChange: function (id) {
-            api.change(id);
-        }
-    };
-    //view
-    var view = {
-        //generator
-        templater: _.template(settings.templateText),
-        ul: 'content list ',
-        face: ' name of component',
-        dropdown: 'div that is dropdown',
-        _render: function () {
-            ctrl.getRoot().html(view.templater({list: model}));
-        },
-        _changeFaceLabel: function (val) {
-            view.face.text(val)
-        },
-        _setSelected: function (el) {
-            view.ul.find('li').removeClass('selected');
-            el.addClass('selected');
-
-        },
-        init: function () {
-            settings.rootElement.append($.parseHTML(settings.divTemplate));
-            this.ul = $('ul.dropdown-menu', settings.rootElement);
-            this.face = $('label[uid="name"]', settings.rootElement);
-            this.dropdown = $('div.dropdown', settings.rootElement);
-            //init bootstrap dropdown
-            $('div[data-toggle="dropdown"]', settings.rootElement).dropdown();
-            //on click behavior
-            this.ul.on('click', ctrl.doOnClick)
-        }
-    };
-
-    var model = {};
-    //default selected value
-    var selectedId = -1;
-
-    ctrl.init();
-
-    var api = {
-        self: self,
-        render: function () {
-            view._render();
-        },
-        selected: selectedId,
-        change: ctrl.onChange
+        //behavior on real change data
+        onChange: undefined
     };
     return api;
 }
