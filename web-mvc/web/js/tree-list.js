@@ -1,19 +1,17 @@
 /**
  * Created by mbondarenko on 17.09.2014.
- */
-/**
  * example : <p/>
  *  var t = new ListTree({
- *           url: 'poi',
- *           baseUrl: 'http://localhost/',
+ *           url: 'REGULATOR',
+ *           baseUrl: 'http://localhost/page/taxonomy/',
  *           rootElement: $('#userPrefsModel  div[tree-list="1"]')
  *       });
  *          t.onChange = function(e){
  *           //do work
  *       }
-
- * @param sett : settings
- * @returns {{reRender: reRender, filter: filter, fetchNewData: fetchNewData, selected: number, onChange: undefined}}
+ * @param sett
+ * @returns {{reRender: reRender, clear: clear, filter: filter, fetchNewData: fetchNewData, selected: selected, onChange: undefined, disabled: disabled}}
+ * @constructor
  */
 function ListTree(sett) {
     var settings = $.extend({
@@ -23,6 +21,8 @@ function ListTree(sett) {
         baseUrl: 'taxonomy/',
         //element to attach this list
         rootElement: '',
+        //do use empty element
+        useEmpty: true,
         //empty el
         emptyElName: '-',
         emptyValue: '',
@@ -30,12 +30,58 @@ function ListTree(sett) {
         showCollapsed: false,
         //does need search
         //adds input and behavior
-        hasSearch: false,
+        hasSearch: true,
         //as tree or only firs level tree
         parseChildren: true,
-        attachedInput: undefined
+        attachedInput: undefined,
+        //valid state of list.
+        valid: true
 
     }, sett);
+    var api = {
+        //redraw current model
+        reRender: function () {
+            view._render();
+        },
+        clear: function () {
+            ctrl.clear();
+        },
+        //filter by given string
+        filter: function (s) {
+            var srch = s || '';
+            ctrl.filter(srch);
+        },
+        //get new data from server
+        //use empty string if U needs just to refetch
+        // by current ulr
+        fetchNewData: function (newDataUrl) {
+            if (newDataUrl && newDataUrl.search) {  //is string
+                settings.url = newDataUrl;
+            }
+            ctrl._getData();
+        },
+        //get currently selected id
+        //if no selection returns -1
+        selected: function () {
+            if (arguments.length == 0) {
+                return selectedId;
+            } else {
+
+            }
+        },
+        //behavior on real change data
+        onChange: function () {
+            settings.attachedInput.trigger('change');
+        },
+        disabled: function (arg) {
+            if (arguments.length == 0) {
+                return disabled;
+            } else {
+                return view._disable(!!arguments[0]);
+            }
+        }
+    };
+    var disabled = false;
     if (_.isEmpty(settings.rootElement) || !_.isObject(settings.rootElement)) {
         throw new Error('no element set');
     }
@@ -47,7 +93,9 @@ function ListTree(sett) {
             $.getJSON(
                     settings.baseUrl + (_.isUndefined(dataUrl) ? settings.url : dataUrl)
                 , function (data) {
-                    model = data;
+                    if (data) {
+                        model = data;
+                    }
                     view._render();
                     ctrl.changeFace(view._findSelected(ctrl.getAttachedVal()));
                 })
@@ -61,12 +109,24 @@ function ListTree(sett) {
             }
             if (!settings.attachedInput) {
                 var attribute = settings.rootElement.attr('tree-list');
-                if (attribute)
-                    settings.attachedInput = $('#' + attribute)
-
+                var dis = settings.rootElement.attr('disabled');
+                if (attribute) {
+                    settings.attachedInput = $('#' + attribute);
+                    //this part searches error element near and if it exists - set valid state to false
+                    var $error = $("#" + attribute + "\\.errors", settings.rootElement.parent());
+                    settings.valid = !($error.length > 0);
+                }
+                if (dis) {
+                    disabled = !!dis;
+                }
             }
+            //set default value to initial input value
+            selectedId = ctrl.getAttachedVal();
+            initialSelected = selectedId;
+
             view.init();
             ctrl._getData();
+            view._disable(disabled);
         },
         getAttachedVal: function () {
             return settings.attachedInput.val();
@@ -74,8 +134,7 @@ function ListTree(sett) {
         getRoot: function () {
             return view.ul;
         },
-        filter: function (input) {
-        },
+        filter: undefined,
         _comparator: function (elName, search) {
             if (_.isUndefined(elName) || _.isUndefined(search)) return false;
             return elName.toLowerCase().search(search) > -1;
@@ -144,15 +203,12 @@ function ListTree(sett) {
                 selectedId = selectedValue;
                 ctrl.onChange(selectedValue);
             }
-            //log if presented
-            if (console) {
-                console.log('selected ' + selectedValue)
-            }
         },
         clear: function () {
             ctrl.changeFace(view.first());
         },
         doOnClick: function (ev) {
+            if (disabled) return;
             var e = ev || window.event;
             var target = e.target || e.srcElement;
             var name = target.tagName;
@@ -172,6 +228,7 @@ function ListTree(sett) {
             ctrl.changeFace(target);
         },
         doShowHide: function (ev) {
+            if (disabled) return;
             var e = ev || window.event;
             var target = e.target || e.srcElement;
             var name = target.tagName;
@@ -201,13 +258,13 @@ function ListTree(sett) {
                 }
                 ctrl.filter(val);
             }, 350);
-            //end do delay on input
         },
         onChange: function (id) {
-            if (api.onChange)
-                api.onChange(id);
             if (settings.attachedInput)
                 settings.attachedInput.val(id);
+            if (api.onChange) {
+                api.onChange(id);
+            }
         },
         preventSubmitOnInput: function (ev) {
             ev = ev || window.event;
@@ -220,7 +277,6 @@ function ListTree(sett) {
     };
     //view
     var view = {
-        emptyTmpl: _.template('<li class="selected" ><div first data-uid="' + settings.emptyValue + '" data-name="<%=obj%>"><label><%=obj%></label></div></li>'),
         noChildrenTmpl: _.template('<li><div data-uid="<%=d.id%>" data-name="<%=d.name%>" tabindex="-1"><label><%=d.name%></label></div></li>'),
         hasChidrenTmpl: _.template(
                 '<li class="has-child ' + (settings.showCollapsed ? 'child-hidden' : '') + '">' +
@@ -235,7 +291,11 @@ function ListTree(sett) {
         ),
         //template of drop-downs main div
         divTemplate: '<div class="search-tree-list dropdown">' +
-            '<div data-toggle="dropdown"><label uid="name">' + settings.emptyElName + '</label></div>' +
+            '<div data-toggle="dropdown">' +
+            '   <div class="arrow left">' +
+            '       <span></span>' +
+            '   </div><label uid="name">' + settings.emptyElName + '</label>' +
+            '</div>' +
             '<div class="dropdown-menu"> ' +
             (settings.hasSearch ? '<label><input class="form-control" type="text"/></label>' : '' ) +
             '<div>' +
@@ -247,12 +307,19 @@ function ListTree(sett) {
         ul: 'content list ',
         face: ' name of component',
         dropdown: 'div that is dropdown',
+        dropdownControl: 'div that has attribute data-toggle ',
+        //get default selected, usualy it first element
         first: function () {
-            return $('div[first]', view.ul);
+            return view._findSelected(initialSelected)
         },
         //functions
         _render: function (newModel) {
             var arr;
+            //add empty representation to model if needed
+            var modelLocal = newModel ? newModel : model;
+            if (settings.useEmpty) {
+                modelLocal.unshift(emptyRow);
+            }
 
             function recursion(m) {
                 var i;
@@ -268,8 +335,7 @@ function ListTree(sett) {
                 return s;
             }
 
-            arr = recursion(newModel ? newModel : model);
-            arr.unshift(view.emptyTmpl(settings.emptyElName));
+            arr = recursion(modelLocal);
             ctrl.getRoot().html(arr.join(""));
         },
         _changeFaceLabel: function (val) {
@@ -306,12 +372,23 @@ function ListTree(sett) {
                 $li.addClass('child-hidden');
             }
         },
+        _disable: function (disable) {
+            disabled = disable;
+            if (disabled) {
+                view.dropdownControl.addClass('disabled');
+                view.dropdown.addClass('disabled');
+            } else {
+                view.dropdownControl.removeClass('disabled');
+                view.dropdown.removeClass('disabled');
+            }
+        },
         //init
         init: function () {
             settings.rootElement.append($.parseHTML(view.divTemplate));
             view.ul = $('ul[role="menu"]', settings.rootElement);
             view.face = $('label[uid="name"]', settings.rootElement);
             view.dropdown = $('div.dropdown', settings.rootElement);
+            view.dropdownControl = $('div[data-toggle="dropdown"]', view.dropdown);
             if (settings.hasSearch) {
                 view.input = $('input', settings.rootElement);
                 //on click behavior
@@ -319,48 +396,18 @@ function ListTree(sett) {
 
                 view.input.on('keydown', ctrl.preventSubmitOnInput);
             }
+            if (!settings.valid) {
+                view.dropdown.addClass("input-error");
+            }
             view.dropdown.on('click', ctrl.doShowHide);
             view.ul.on('click', ctrl.doOnClick)
         }
     };
-
-    var model = {};
+    var emptyRow = {id: settings.emptyValue, name: settings.emptyElName};
+    var model = [];
     //default selected value
-    var selectedId = -1;
-
+    var selectedId = settings.emptyValue;
+    var initialSelected = settings.emptyValue;
     ctrl.init();
-
-    var api = {
-        //redraw current model
-        reRender: function () {
-            view._render();
-        },
-        clear: function () {
-            ctrl.clear();
-        },
-        //filter by given string
-        filter: function (s) {
-            var srch = s || '';
-            ctrl.filter(srch);
-        },
-        //get new data from server
-        //use empty string if U needs just to refetch
-        // by current ulr
-        fetchNewData: function (newDataUrl) {
-            if (newDataUrl && newDataUrl.search) {  //is string
-                settings.url = newDataUrl;
-            }
-            ctrl._getData();
-        },
-        //get currently selected id
-        //if no selection returns -1
-        selected: selectedId,
-        //behavior on real change data
-        onChange: undefined
-    };
     return api;
 }
-
-
-
-
