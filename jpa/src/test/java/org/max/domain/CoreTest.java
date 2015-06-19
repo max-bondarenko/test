@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -59,6 +61,31 @@ public class CoreTest {
         em.getTransaction().commit();
 
         assertNotNull(core.getOne().getId());
+    }
+
+    @Test
+    public void testPersistAndMerge() throws Exception {
+        em.getTransaction().begin();
+        Core c = new Core();
+        c.setId(2L);
+
+        em.merge(c);
+
+        em.getTransaction().commit();
+    }
+
+    @Test
+    public void testEmebb() throws Exception {
+        em.getTransaction().begin();
+        Core c = new Core();
+
+        List<ListItem> i = new ArrayList<>(3);
+        i.add(new ListItem("5555"));
+        i.add(new ListItem("5556"));
+        i.add(new ListItem("5557"));
+        c.setList(i);
+        em.persist(c);
+        em.getTransaction().commit();
     }
 
     @After
