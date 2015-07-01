@@ -33,6 +33,11 @@
             <name>libs-snapshot-remote</name>
             <url>http://repo.spring.io/libs-snapshot-remote</url>
         </repository>
+        <repository>
+            <id>java.net2</id>
+            <name>java.net2</name>
+            <url>https://repository.jboss.org/nexus/content/repositories/public/</url>
+        </repository>
     </repositories>
 
     <build>
