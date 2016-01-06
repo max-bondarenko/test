@@ -1,7 +1,12 @@
 package org.max.domain;
 
+import org.hibernate.annotations.SortComparator;
+import org.hibernate.annotations.SortNatural;
+
 import javax.persistence.*;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by add on 17.06.2015.
@@ -19,8 +24,21 @@ public class Core {
     @CollectionTable(name = "items")
     private List<ListItem> list;
 
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "core_id",referencedColumnName = "id")
+    @OrderBy("name")
+    private Set<SetItem> set = new LinkedHashSet<>();
 
     public Core() {
+    }
+
+
+    public Set<SetItem> getSet() {
+        return set;
+    }
+
+    public void setSet(Set<SetItem> set) {
+        this.set = set;
     }
 
     public Core(One one) {

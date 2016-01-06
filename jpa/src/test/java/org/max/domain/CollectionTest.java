@@ -59,6 +59,59 @@ public class CollectionTest {
 
     }
 
+    @Test
+    public void testSet() throws Exception {
+        em.getTransaction().begin();
+        Core c = new Core();
+        em.persist(c);
+        log.info("core id: {}", c.getId());
+        c.getSet().add(new SetItem("a1"));
+        c.getSet().add(new SetItem("b1"));
+        c.getSet().add(new SetItem("b2"));
+        em.getTransaction().commit();
+
+        em.getTransaction().begin();
+        Core core = em.find(Core.class, 1L);
+        /* for Core --> One
+          SELECT
+         core0_.id     AS id1_0_0_,
+         core0_.one_id AS one_id2_0_0_,
+         one1_.id      AS id1_1_1_,
+         one1_.type    AS type2_1_1_
+         FROM
+         Core core0_
+         LEFT OUTER JOIN
+         One one1_
+         ON core0_.one_id = one1_.id
+         WHERE
+         core0_.id = 1
+         */
+
+        /* for Core --> SetItem
+         SELECT
+         set0_.core_id AS core_id3_0_0_,
+         set0_.id      AS id1_2_0_,
+         set0_.id      AS id1_2_1_,
+         set0_.name    AS name2_2_1_
+         FROM
+         SetItem set0_
+         WHERE
+         set0_.core_id = 1
+         ORDER BY
+         set0_.name
+
+         */
+
+        core.getSet().remove(new SetItem("b1"));
+        /*
+         UPDATE SetItem SET core_id = NULL WHERE core_id = 1 AND id = 2;
+         DELETE FROM SetItem WHERE id = 2;
+         */
+
+        em.getTransaction().commit();
+
+    }
+
     @After
     public void tearDown() throws Exception {
         if (em != null) {
