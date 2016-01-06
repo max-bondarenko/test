@@ -12,9 +12,8 @@ public class Core {
     @Id
     @GeneratedValue
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     private One one;
-
 
     @ElementCollection
     @CollectionTable(name = "items")
