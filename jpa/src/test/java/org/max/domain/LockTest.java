@@ -74,4 +74,41 @@ public class LockTest {
 
 
     }
+
+    @Test
+    public void testName2() throws Exception {
+        EntityManager em = Persistence.createEntityManagerFactory("unit").createEntityManager();
+
+        EntityTransaction transaction = em.getTransaction();
+        transaction.begin();
+
+        Core core = em.find(Core.class, 1L);
+        assertNotNull(core);
+
+        em.lock(core, LockModeType.PESSIMISTIC_WRITE);
+
+
+        transaction.commit();
+
+        assertNotNull(core.getOne().getId());
+
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                EntityManager em1 = Persistence.createEntityManagerFactory("unit").createEntityManager();
+                EntityTransaction transaction1 = em1.getTransaction();
+                transaction1.begin();
+
+                Core core1 = em1.find(Core.class, 1L);
+                em1.lock(core1, LockModeType.PESSIMISTIC_WRITE);
+
+                transaction1.commit();
+
+
+            }
+        });
+        thread.run();
+
+    }
 }
