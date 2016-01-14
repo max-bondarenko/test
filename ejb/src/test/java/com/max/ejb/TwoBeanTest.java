@@ -1,5 +1,8 @@
 package com.max.ejb;
 
+import com.max.ejb.cont.Type;
+import com.max.ejb.cont.Type1;
+import com.max.ejb.cont.Type2;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -23,7 +26,13 @@ public class TwoBeanTest {
     @Deployment
     public static JavaArchive createDeployment() {
         JavaArchive jar = ShrinkWrap.create(JavaArchive.class)
-                .addClasses(First.class, Two.class, FirstBean.class, TwoBean.class)
+                .addClasses(First.class,
+                        Two.class,
+                        FirstBean.class,
+                        TwoBean.class,
+                        Type2.class,
+                        Type1.class,
+                        Type.class)
                 .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
         return jar;
     }

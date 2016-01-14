@@ -1,14 +1,14 @@
 package com.max.ejb;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 /**
  * Created by add on 01.07.2015.
  */
 @Stateless
 public class TwoBean implements Two {
-    @EJB
+    @Inject
     private First first;
 
     @Override
