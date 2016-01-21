@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @EnableAutoConfiguration
 public class SimpleController {
 
-
     @RequestMapping("/")
     @ResponseBody
     public String hetHello(){
@@ -24,7 +23,5 @@ public class SimpleController {
     public static void main(String[] args) {
         SpringApplication.run(SimpleController.class,args);
     }
-
-
 
 }
