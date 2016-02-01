@@ -30,7 +30,9 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
             <version>4.0.3.RELEASE</version>
+            <scope>compile</scope>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -93,6 +95,52 @@
          </plugins>
 
     </build>
+
+    <profiles>
+        <profile>
+            <id>internal_ldap</id>
+            <dependencies>
+
+                <dependency>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-ldap</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.directory.server</groupId>
+                    <artifactId>apacheds-core</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.directory.server</groupId>
+                    <artifactId>apacheds-core-entry</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.directory.server</groupId>
+                    <artifactId>apacheds-protocol-ldap</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.directory.server</groupId>
+                    <artifactId>apacheds-protocol-shared</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.directory.server</groupId>
+                    <artifactId>apacheds-server-jndi</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.directory.shared</groupId>
+                    <artifactId>shared-ldap</artifactId>
+                    <scope>compile</scope>
+                </dependency>
+
+            </dependencies>
+        </profile>
+    </profiles>
 
 
 </project>
