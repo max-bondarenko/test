@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth
                 // enable in memory based authentication with a user named
                 // "user" and "admin"
-                .inMemoryAuthentication().withUser("user").password("pp").roles("USER").and()
+                .inMemoryAuthentication().withUser("user").password("ppp").roles("USER").and()
                 .withUser("admin").password("ppaa").roles("USER", "ADMIN");
     }
 }
