@@ -12,22 +12,11 @@ import java.lang.Class;import java.lang.Override;import java.lang.String;import 
 public class Registrar extends RepositoryBeanDefinitionRegistrarSupport {
     @Override
     protected Class<? extends Annotation> getAnnotation() {
-        return Sim.class;
+        return EnableDruidRepositories.class;
     }
 
     @Override
     protected RepositoryConfigurationExtension getExtension() {
-        return new RepositoryConfigurationExtensionSupport(){
-
-            @Override
-            public String getRepositoryFactoryClassName() {
-                return null;
-            }
-
-            @Override
-            protected String getModulePrefix() {
-                return null;
-            }
-        };
+        return new RepRepositoryConfigurationExtensionSupport();
     }
 }

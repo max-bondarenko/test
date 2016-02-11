@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 @Documented
 @Inherited
 @Import(Registrar.class)
-public @interface Sim {
+public @interface EnableDruidRepositories {
 
     @AliasFor("basePackages")
     String[] value() default {};
@@ -24,8 +24,7 @@ public @interface Sim {
 
     Class<?>[] basePackageClasses() default {};
 
-    Class<?> repositoryFactoryBeanClass() default RepFactorySupport.class;
-
+    Class<?> repositoryFactoryBeanClass() default RepFactoryBeanSupport.class;
 
     ComponentScan.Filter[] includeFilters() default {};
 
@@ -42,4 +41,6 @@ public @interface Sim {
      * @return
      */
     String repositoryImplementationPostfix() default "Impl";
+
+    String namedQueriesLocation() default "";
 }
