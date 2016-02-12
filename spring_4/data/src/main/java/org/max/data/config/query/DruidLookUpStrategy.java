@@ -30,10 +30,17 @@ public class DruidLookUpStrategy implements QueryLookupStrategy {
         DruidQuery annotation = AnnotationUtils.findAnnotation(method, DruidQuery.class);
         if (annotation != null) {
             checkRawType(annotation, method);
-            return new DruidTemplateQuery();
+
+            return populateQuery(new DruidTemplateQuery(), annotation, method);
 
         }
         return null;
+    }
+
+    private RepositoryQuery populateQuery(DruidTemplateQuery query, DruidQuery annotation, Method m) {
+        query.setDataSource(annotation.dataSource());
+        query.setTemplateName(annotation.templateName());
+        return query;
     }
 
     private void checkRawType(DruidQuery annotation, Method method) {

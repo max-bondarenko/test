@@ -1,6 +1,5 @@
 package org.max.data.config.query;
 
-import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.query.QueryMethod;
 import org.springframework.data.repository.query.RepositoryQuery;
@@ -8,27 +7,35 @@ import org.springframework.data.repository.query.RepositoryQuery;
 import java.lang.reflect.Method;
 
 /**
-* Created by Maksym_Bondarenko on 2/12/2016.
-*/
+ * Created by Maksym_Bondarenko on 2/12/2016.
+ */
 public class DruidTemplateQuery implements RepositoryQuery {
 
     private QueryMethod queryMethod;
-    private Method method;
-    private RepositoryMetadata metadata;
-    private NamedQueries namedQueries;
+    private String templateName;
+    private String dataSource;
 
     public DruidTemplateQuery() {
-
     }
 
-    public DruidTemplateQuery(Method method, RepositoryMetadata metadata, NamedQueries namedQueries) {
+    public DruidTemplateQuery(Method method, RepositoryMetadata metadata) {
         this.queryMethod = new QueryMethod(method, metadata);
+    }
 
+    public String getTemplateName() {
+        return templateName;
+    }
 
-        this.metadata = metadata;
-        this.namedQueries = namedQueries;
-        this.method = method;
+    public void setTemplateName(String templateName) {
+        this.templateName = templateName;
+    }
 
+    public String getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(String dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -38,8 +45,6 @@ public class DruidTemplateQuery implements RepositoryQuery {
 
     @Override
     public QueryMethod getQueryMethod() {
-
-
         return this.queryMethod;
     }
 }

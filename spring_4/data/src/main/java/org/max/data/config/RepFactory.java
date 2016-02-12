@@ -38,7 +38,7 @@ public class RepFactory extends RepositoryFactorySupport {
         return new QueryLookupStrategy() {
             @Override
             public RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, NamedQueries namedQueries) {
-                return new DruidTemplateQuery(method, metadata, namedQueries);
+                return new DruidTemplateQuery(method, metadata);
             }
         };
     }

@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.RepositoryQuery;
 
 import java.lang.reflect.Method;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doReturn;
@@ -56,8 +57,24 @@ public class DruidLookUpStrategyTest {
         assertTrue(repositoryQuery instanceof DruidTemplateQuery);
     }
 
+    @Test
+    public void testResolveQueryPopulatedWithannotetion() throws Exception {
+        Class<ForMethodTest> t = ForMethodTest.class;
+        Method getById = t.getMethod("getById", String.class);
+
+        doReturn(String.class).when(metaData).getReturnedDomainClass(any(Method.class));
+
+        RepositoryQuery repositoryQuery = test.resolveQuery(getById, metaData, null);
+
+        assertTrue(repositoryQuery instanceof DruidTemplateQuery);
+
+        assertEquals("wiki", ((DruidTemplateQuery) repositoryQuery).getDataSource());
+        assertEquals("templ_wiki", ((DruidTemplateQuery) repositoryQuery).getTemplateName());
+    }
+
+
     public static class ForMethodTest {
-        @DruidQuery(dataSource = "wiki")
+        @DruidQuery(dataSource = "wiki", templateName = "templ_wiki")
         public String getById(String a) {
             return null; // do nothing just a type
         }
