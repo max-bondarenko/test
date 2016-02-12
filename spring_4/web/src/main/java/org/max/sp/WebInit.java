@@ -12,7 +12,6 @@ public class WebInit extends AbstractAnnotationConfigDispatcherServletInitialize
     protected Class<?>[] getRootConfigClasses() {
         return new Class[]{
                 RootConfig.class
-        , org.max.sp.SecurityConfig.class
         };
     }
 

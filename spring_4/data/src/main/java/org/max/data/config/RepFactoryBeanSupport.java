@@ -13,7 +13,6 @@ import java.io.Serializable;
  */
 public class RepFactoryBeanSupport<T extends Repository<S, ID>, S, ID extends Serializable> extends RepositoryFactoryBeanSupport<T, S, ID> {
 
-
     @Autowired
     private RepoBackRegistry registry;
 
