@@ -6,6 +6,7 @@ import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.query.QueryLookupStrategy;
 import org.springframework.data.repository.query.RepositoryQuery;
+import org.springframework.util.StringUtils;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -31,15 +32,27 @@ public class DruidLookUpStrategy implements QueryLookupStrategy {
         if (annotation != null) {
             checkRawType(annotation, method);
 
-            return populateQuery(new DruidTemplateQuery(), annotation, method);
+            return populateQuery(new DruidTemplateQuery(), annotation, method, metadata);
 
         }
         return null;
     }
 
-    private RepositoryQuery populateQuery(DruidTemplateQuery query, DruidQuery annotation, Method m) {
-        query.setDataSource(annotation.dataSource());
-        query.setTemplateName(annotation.templateName());
+    private RepositoryQuery populateQuery(DruidTemplateQuery query, DruidQuery methodAnn, Method m, RepositoryMetadata md) {
+        String dataSource = methodAnn.dataSource();
+        if (StringUtils.isEmpty(dataSource)) {
+            DruidQuery classAnn = AnnotationUtils.findAnnotation(md.getRepositoryInterface(), DruidQuery.class);
+            if (classAnn == null) {
+                throw new IllegalArgumentException("For empty dataSource on method " + m.getName()
+                        + " must be DruidQuery annotation with dataSource set");
+            }
+            dataSource = classAnn.dataSource();
+        }
+        if (StringUtils.isEmpty(dataSource)) {
+            throw new IllegalArgumentException("Empty dataSource name");
+        }
+        query.setDataSource(dataSource);
+        query.setTemplateName(methodAnn.templateName());
         return query;
     }
 

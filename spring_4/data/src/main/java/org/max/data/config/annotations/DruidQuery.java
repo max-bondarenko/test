@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
  */
 @QueryAnnotation
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.TYPE})
 public @interface DruidQuery {
     @AliasFor("dataSource")
     String value() default "";
