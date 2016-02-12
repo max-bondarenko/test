@@ -21,17 +21,6 @@ public class DruidLookUpStrategyTest {
     @Mock
     RepositoryMetadata metaData;
 
-    public static class ForMethodTest {
-        @DruidQuery(dataSource = "wiki")
-        public String getById(String a) {
-            return null; // do nothing just a type
-        }
-        @DruidQuery("wiki")
-        public Integer get1(){
-            return null;
-        }
-    }
-
     @Test
     public void testResolveQueryByAnnotationType() throws Exception {
         Class<ForMethodTest> t = ForMethodTest.class;
@@ -44,6 +33,18 @@ public class DruidLookUpStrategyTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void testResolveQueryRawTypeThrow() throws Exception {
+        Class<ForMethodTest> t = ForMethodTest.class;
+        Method getById = t.getMethod("get1");
+
+        doReturn(String.class).when(metaData).getReturnedDomainClass(any(Method.class));
+
+        RepositoryQuery repositoryQuery = test.resolveQuery(getById, metaData, null);
+
+        assertTrue(repositoryQuery instanceof DruidTemplateQuery);
+    }
+
+    @Test
     public void testResolveQueryRawType() throws Exception {
         Class<ForMethodTest> t = ForMethodTest.class;
         Method getById = t.getMethod("getById", String.class);
@@ -51,6 +52,19 @@ public class DruidLookUpStrategyTest {
         doReturn(String.class).when(metaData).getReturnedDomainClass(any(Method.class));
 
         RepositoryQuery repositoryQuery = test.resolveQuery(getById, metaData, null);
+
         assertTrue(repositoryQuery instanceof DruidTemplateQuery);
+    }
+
+    public static class ForMethodTest {
+        @DruidQuery(dataSource = "wiki")
+        public String getById(String a) {
+            return null; // do nothing just a type
+        }
+
+        @DruidQuery("wiki")
+        public Integer get1() {
+            return null;
+        }
     }
 }

@@ -19,5 +19,8 @@ public @interface DruidQuery {
     String value() default "";
     @AliasFor("value")
     String dataSource() default "";
+
     String templateName() default "query";
+
+    boolean isRaw() default true;
 }
