@@ -1,18 +1,15 @@
 package org.max.data.config;
 
 import org.max.data.back.RepoBackRegistry;
-import org.max.data.config.query.DruidTemplateQuery;
+import org.max.data.config.query.DruidLookUpStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.repository.core.EntityInformation;
-import org.springframework.data.repository.core.NamedQueries;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 import org.springframework.data.repository.query.QueryLookupStrategy;
-import org.springframework.data.repository.query.RepositoryQuery;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 
 /**
  * Factory that actually responsible for creation of Repo or really backs Repo on behind.
@@ -35,12 +32,7 @@ public class RepFactory extends RepositoryFactorySupport {
 
     @Override
     protected QueryLookupStrategy getQueryLookupStrategy(QueryLookupStrategy.Key key) {
-        return new QueryLookupStrategy() {
-            @Override
-            public RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, NamedQueries namedQueries) {
-                return new DruidTemplateQuery(method, metadata);
-            }
-        };
+        return new DruidLookUpStrategy();
     }
 
     @Override

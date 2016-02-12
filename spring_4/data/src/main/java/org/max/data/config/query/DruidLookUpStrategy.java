@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class DruidLookUpStrategy implements QueryLookupStrategy {
 
-    Collection<Class> RAW_TYPES = new LinkedList<>(Arrays.asList(
+    private static Collection<Class> RAW_TYPES = new LinkedList<>(Arrays.asList(
             String.class,
             InputStream.class,
             Map.class
