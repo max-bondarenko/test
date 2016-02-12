@@ -38,7 +38,18 @@ public class DruidLookUpStrategy implements QueryLookupStrategy {
         return null;
     }
 
-    private RepositoryQuery populateQuery(DruidTemplateQuery query, DruidQuery methodAnn, Method m, RepositoryMetadata md) {
+    private RepositoryQuery populateQuery(DruidTemplateQuery query, DruidQuery methodAnn, Method method, RepositoryMetadata md) {
+        String dataSource = getDataSource(methodAnn, method, md);
+        query.setDataSource(dataSource);
+        String templateName = methodAnn.templateName();
+        if (StringUtils.isEmpty(templateName)) {
+            templateName = method.getName();
+        }
+        query.setTemplateName(templateName);
+        return query;
+    }
+
+    private String getDataSource(DruidQuery methodAnn, Method m, RepositoryMetadata md) {
         String dataSource = methodAnn.dataSource();
         if (StringUtils.isEmpty(dataSource)) {
             DruidQuery classAnn = AnnotationUtils.findAnnotation(md.getRepositoryInterface(), DruidQuery.class);
@@ -51,9 +62,7 @@ public class DruidLookUpStrategy implements QueryLookupStrategy {
         if (StringUtils.isEmpty(dataSource)) {
             throw new IllegalArgumentException("Empty dataSource name");
         }
-        query.setDataSource(dataSource);
-        query.setTemplateName(methodAnn.templateName());
-        return query;
+        return dataSource;
     }
 
     private void checkRawType(DruidQuery annotation, Method method) {

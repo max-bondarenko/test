@@ -77,9 +77,11 @@ public class DruidLookUpStrategyTest {
             return null;
         }
 
+        /**
+         * dataSource: from class annotation
+         * template: method name
+         */
         @DruidQuery
-        //dataSource: from class annotation
-        //template: method name
         public String get3(String a) {
             return null;
         }
