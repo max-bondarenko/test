@@ -1,6 +1,7 @@
 package org.max.data.rep;
 
-import org.max.data.config.GetRepository;
+
+import org.max.spring.data.config.repository.GetRepository;
 
 import java.util.Map;
 
