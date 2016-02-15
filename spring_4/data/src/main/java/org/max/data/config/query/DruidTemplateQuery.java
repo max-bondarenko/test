@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.RepositoryQuery;
 import java.lang.reflect.Method;
 
 /**
+ * Represents query backed by template
+ *
  * Created by Maksym_Bondarenko on 2/12/2016.
  */
 public class DruidTemplateQuery implements RepositoryQuery {

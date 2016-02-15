@@ -42,7 +42,8 @@ public class RepFactory extends RepositoryFactorySupport {
 
     @Override
     protected Object getTargetRepository(RepositoryMetadata metadata) {
-        return new DefaultRepository();
+        Class<?> domainType = metadata.getDomainType();
+        return new DefaultRepository(domainType);
     }
 
     @Override

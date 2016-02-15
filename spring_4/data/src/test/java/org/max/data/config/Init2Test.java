@@ -24,6 +24,6 @@ public class Init2Test {
         assertNotNull(simpleRepo);
         assertNotNull(notSimpleRepo);
         assertNotNull(simpleRepo.byId("ass"));
-        assertNotNull(notSimpleRepo.byName("asfas"));
+        assertNotNull(notSimpleRepo.byId("asfas"));
     }
 }

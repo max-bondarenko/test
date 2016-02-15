@@ -1,5 +1,6 @@
 package org.max.data.config.query;
 
+import org.max.data.config.GetRepository;
 import org.max.data.config.annotations.DruidQuery;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.data.repository.core.NamedQueries;
@@ -31,10 +32,11 @@ public class DruidLookUpStrategy implements QueryLookupStrategy {
         DruidQuery annotation = AnnotationUtils.findAnnotation(method, DruidQuery.class);
         if (annotation != null) {
             checkRawType(annotation, method);
-
             return populateQuery(new DruidTemplateQuery(), annotation, method, metadata);
-
+        } else if (method.getDeclaringClass().equals(GetRepository.class)) {
+            return new DruidBaseQuery();
         }
+
         return null;
     }
 
