@@ -1,5 +1,7 @@
 package org.max.spring.data.back;
 
+import org.springframework.http.HttpMethod;
+
 import java.util.Map;
 
 /**
@@ -7,8 +9,16 @@ import java.util.Map;
  */
 
 public interface QueryBackend<T> {
+    /**
+     * Base url for querying.
+     *
+     * @return
+     */
+    String getBaseUrl();
 
     String getTemplate(String templateName);
+
+    T executeByUrl(String url, HttpMethod method, Object[] parameters);
 
     T execute(String template);
 

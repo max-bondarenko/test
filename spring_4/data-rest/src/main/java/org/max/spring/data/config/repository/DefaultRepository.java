@@ -1,9 +1,9 @@
 package org.max.spring.data.config.repository;
 
+import org.max.spring.data.back.QueryBackend;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.repository.Repository;
+import org.springframework.http.HttpMethod;
 import org.springframework.util.Assert;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -12,29 +12,32 @@ import java.util.Map;
 /**
  * Created by Maksym_Bondarenko on 2/11/2016.
  */
-public class DefaultRepository<T, ID extends Serializable> implements Repository<T, ID> {
+public class DefaultRepository<T, ID extends Serializable> implements GetRepository<T, ID> {
 
     private Class<T> returnType;
 
-    private RestTemplate template;
+    private QueryBackend<T> backend;
 
 
     public DefaultRepository(Class<T> domainType) {
         this.returnType = domainType;
     }
 
-    public void setTemplate(RestTemplate template) {
-        this.template = template;
+    public void setBackend(QueryBackend backend) {
+        this.backend = backend;
     }
 
+    @Override
     public T byId(ID id) {
-        Assert.notNull(template, "There is no RestTemplate injected.");
+        Assert.notNull(backend, "There is no backend injected.");
         //just for test
         if (returnType.isAssignableFrom(Map.class)) {
             Class<LinkedHashMap> linkedHashMapClass = LinkedHashMap.class;
             LinkedHashMap linkedHashMap = BeanUtils.instantiateClass(linkedHashMapClass);
             return (T) linkedHashMap;
         }
-        return null;
+        Object[] parameters = new Object[]{id};
+        T ret = backend.executeByUrl(backend.getBaseUrl(), HttpMethod.GET, parameters);
+        return ret;
     }
 }

@@ -22,6 +22,7 @@ public class RepFactory extends RepositoryFactorySupport {
     private static final Logger log = LoggerFactory.getLogger(RepFactory.class);
 
     private RestTemplate template;
+    // may get from ctx by narrower types
     private QueryBackend backend;
 
     public void setTemplate(RestTemplate template) {
@@ -44,10 +45,13 @@ public class RepFactory extends RepositoryFactorySupport {
     }
 
     @Override
-    protected Object getTargetRepository(RepositoryMetadata metadata) {
-        Class<?> domainType = metadata.getDomainType();
+    protected Object getTargetRepository(RepositoryMetadata md) {
+        Class<?> intf = md.getRepositoryInterface();
+        boolean isBareInterface = intf.getDeclaredMethods().length == 0;
+
+        Class<?> domainType = md.getDomainType();
         DefaultRepository df = new DefaultRepository(domainType);
-        df.setTemplate(template);
+        df.setBackend(backend);
         return df;
     }
 

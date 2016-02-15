@@ -4,6 +4,7 @@ import org.max.spring.data.back.QueryBackend;
 import org.max.spring.data.config.annotations.EnableDruidRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -19,7 +20,17 @@ public class TestConfig {
     public QueryBackend orderService() {
         QueryBackend r = new QueryBackend() {
             @Override
+            public String getBaseUrl() {
+                return "http://localhost";
+            }
+
+            @Override
             public String getTemplate(String templateName) {
+                return null;
+            }
+
+            @Override
+            public Object executeByUrl(String url, HttpMethod method, Object[] parameters) {
                 return null;
             }
 

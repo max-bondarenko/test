@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.RepositoryQuery;
 public class DruidBaseQuery implements RepositoryQuery {
     @Override
     public Object execute(Object[] parameters) {
+
         return null; //todo
     }
 
