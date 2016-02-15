@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
 
@@ -15,11 +16,14 @@ public class RepFactoryBeanSupport<T extends Repository<S, ID>, S, ID extends Se
 
     @Autowired
     private RepoBackRegistry registry;
+    @Autowired(required = false)
+    private RestTemplate template;
 
     @Override
     protected RepositoryFactorySupport createRepositoryFactory() {
         RepFactory repFactory = new RepFactory();
         repFactory.setDao(registry);
+        repFactory.setTemplate(template);
         return repFactory;
     }
 }

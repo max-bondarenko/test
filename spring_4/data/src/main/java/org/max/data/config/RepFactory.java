@@ -8,6 +8,7 @@ import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.core.support.RepositoryFactorySupport;
 import org.springframework.data.repository.query.QueryLookupStrategy;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.Serializable;
 
@@ -20,9 +21,14 @@ public class RepFactory extends RepositoryFactorySupport {
     private static final Logger log = LoggerFactory.getLogger(RepFactory.class);
 
     private RepoBackRegistry dao;
+    private RestTemplate template;
 
     public void setDao(RepoBackRegistry dao) {
         this.dao = dao;
+    }
+
+    public void setTemplate(RestTemplate template) {
+        this.template = template;
     }
 
     @Override
@@ -43,7 +49,9 @@ public class RepFactory extends RepositoryFactorySupport {
     @Override
     protected Object getTargetRepository(RepositoryMetadata metadata) {
         Class<?> domainType = metadata.getDomainType();
-        return new DefaultRepository(domainType);
+        DefaultRepository df = new DefaultRepository(domainType);
+        df.setTemplate(template);
+        return df;
     }
 
     @Override
