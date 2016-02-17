@@ -46,7 +46,6 @@ public class InitTest {
         assertNotNull(defaultBackedRepo);
         String asd = defaultBackedRepo.byId("asd");
         assertTrue(isMethodCall);
-
     }
 
     @Configuration

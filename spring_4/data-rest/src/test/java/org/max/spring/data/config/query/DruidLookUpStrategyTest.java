@@ -2,6 +2,7 @@ package org.max.spring.data.config.query;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.max.spring.data.back.QueryBackend;
 import org.max.spring.data.config.annotations.DruidQuery;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -17,9 +18,12 @@ import static org.mockito.Mockito.doReturn;
 @RunWith(MockitoJUnitRunner.class)
 public class DruidLookUpStrategyTest {
 
-    DruidLookUpStrategy test = new DruidLookUpStrategy();
     @Mock
     RepositoryMetadata metaData;
+    @Mock
+    QueryBackend backend;
+
+    DruidLookUpStrategy test = new DruidLookUpStrategy(backend);
 
     @Test
     public void testResolveQueryByAnnotationType() throws Exception {

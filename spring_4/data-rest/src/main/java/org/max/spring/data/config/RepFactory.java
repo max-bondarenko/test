@@ -36,7 +36,7 @@ public class RepFactory extends RepositoryFactorySupport {
 
     @Override
     protected QueryLookupStrategy getQueryLookupStrategy(QueryLookupStrategy.Key key) {
-        return new DruidLookUpStrategy();
+        return new DruidLookUpStrategy(backend);
     }
 
     @Override

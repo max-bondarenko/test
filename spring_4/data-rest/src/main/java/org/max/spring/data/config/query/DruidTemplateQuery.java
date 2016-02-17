@@ -1,8 +1,8 @@
 package org.max.spring.data.config.query;
 
+import org.max.spring.data.back.QueryBackend;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.query.QueryMethod;
-import org.springframework.data.repository.query.RepositoryQuery;
 
 import java.lang.reflect.Method;
 
@@ -11,16 +11,18 @@ import java.lang.reflect.Method;
  *
  * Created by Maksym_Bondarenko on 2/12/2016.
  */
-public class DruidTemplateQuery implements RepositoryQuery {
+public class DruidTemplateQuery extends DruidBaseQuery {
 
     private QueryMethod queryMethod;
     private String templateName;
     private String dataSource;
 
-    public DruidTemplateQuery() {
+    public DruidTemplateQuery(QueryBackend backend) {
+        super(backend);
     }
 
-    public DruidTemplateQuery(Method method, RepositoryMetadata metadata) {
+    public DruidTemplateQuery(QueryBackend backend, Method method, RepositoryMetadata metadata) {
+        super(backend);
         this.queryMethod = new QueryMethod(method, metadata);
     }
 
