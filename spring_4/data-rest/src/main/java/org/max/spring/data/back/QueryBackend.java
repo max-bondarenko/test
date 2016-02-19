@@ -18,7 +18,7 @@ public interface QueryBackend<T> {
 
     String getTemplate(String templateName);
 
-    T executeByUrl(String url, HttpMethod method, Object[] parameters);
+    T executeByUrl(String url, HttpMethod method, Class<T> responseType, Object[] parameters);
 
     T execute(String template);
 

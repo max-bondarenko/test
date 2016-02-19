@@ -46,9 +46,6 @@ public class RepFactory extends RepositoryFactorySupport {
 
     @Override
     protected Object getTargetRepository(RepositoryMetadata md) {
-        Class<?> intf = md.getRepositoryInterface();
-        boolean isBareInterface = intf.getDeclaredMethods().length == 0;
-
         Class<?> domainType = md.getDomainType();
         DefaultRepository df = new DefaultRepository(domainType);
         df.setBackend(backend);

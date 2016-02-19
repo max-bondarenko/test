@@ -64,7 +64,7 @@ public class InitTest {
                 }
 
                 @Override
-                public Object executeByUrl(String url, HttpMethod method, Object[] parameters) {
+                public Object executeByUrl(String url, HttpMethod method, Class r, Object[] parameters) {
                     isMethodCall = true;
                     return null;
                 }
