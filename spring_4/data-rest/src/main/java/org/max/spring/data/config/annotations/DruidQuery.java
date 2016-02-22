@@ -15,12 +15,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface DruidQuery {
-    @AliasFor("dataSource")
+    @AliasFor("templateName")
     String value() default "";
     @AliasFor("value")
-    String dataSource() default "";
-
     String templateName() default "";
+
+    String dataSource() default "";
 
     boolean isRaw() default true;
 }

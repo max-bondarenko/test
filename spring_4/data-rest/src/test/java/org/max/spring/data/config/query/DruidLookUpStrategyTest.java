@@ -3,17 +3,18 @@ package org.max.spring.data.config.query;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.max.spring.data.back.QueryBackend;
+import org.max.spring.data.config.RepFactory;
 import org.max.spring.data.config.annotations.DruidQuery;
+import org.max.spring.data.config.query.template.DruidTemplateQuery;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.repository.core.RepositoryMetadata;
+import org.springframework.data.repository.query.QueryLookupStrategy;
 import org.springframework.data.repository.query.RepositoryQuery;
 
 import java.lang.reflect.Method;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DruidLookUpStrategyTest {
@@ -23,7 +24,7 @@ public class DruidLookUpStrategyTest {
     @Mock
     QueryBackend backend;
 
-    DruidLookUpStrategy test = new DruidLookUpStrategy(backend);
+    QueryLookupStrategy test = new RepFactory();
 
     @Test
     public void testResolveQueryByAnnotationType() throws Exception {
@@ -39,25 +40,6 @@ public class DruidLookUpStrategyTest {
     public void testResolveQueryRawType() throws Exception {
         base("get0");
     }
-
-    @Test
-    public void testResolveQueryPopulatedWithannotetion() throws Exception {
-        RepositoryQuery repositoryQuery = base("get0");
-
-        assertEquals("wiki", ((DruidTemplateQuery) repositoryQuery).getDataSource());
-        assertEquals("templ_wiki", ((DruidTemplateQuery) repositoryQuery).getTemplateName());
-    }
-
-    @Test
-    public void testResolveQueryPopulatedWithannotetionDefaultToClass() throws Exception {
-        doReturn(ForMethodTest.class).when(metaData).getRepositoryInterface();
-
-        RepositoryQuery repositoryQuery = base("get3");
-
-        assertEquals("class_ds", ((DruidTemplateQuery) repositoryQuery).getDataSource());
-        assertEquals("get3", ((DruidTemplateQuery) repositoryQuery).getTemplateName());
-    }
-
 
     private RepositoryQuery base(String name) throws NoSuchMethodException {
         Class<ForMethodTest> t = ForMethodTest.class;

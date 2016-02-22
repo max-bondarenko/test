@@ -47,11 +47,6 @@ public class TestConfig {
             }
 
             @Override
-            public Object execute(String template) {
-                return null;
-            }
-
-            @Override
             public Object execute(String templateName, Map placeholders) {
                 return null;
             }

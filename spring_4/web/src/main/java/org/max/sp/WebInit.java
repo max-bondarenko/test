@@ -1,6 +1,6 @@
 package org.max.sp;
 
-import org.max.sp.config.RootConfig;
+import org.max.spr.config.RootConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 public class SimpleResource {
 
     private static Logger log = LoggerFactory.getLogger(SimpleResource.class);
-    //    @Value(value = "#{app['something.value']}")
     @Value(value = "${something.value}")
     private String appValue;
     @Autowired

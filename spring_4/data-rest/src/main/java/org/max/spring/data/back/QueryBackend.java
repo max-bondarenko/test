@@ -20,8 +20,6 @@ public interface QueryBackend<T> {
 
     T executeByUrl(String url, HttpMethod method, Class<T> responseType, Object[] parameters);
 
-    T execute(String template);
-
     T execute(String templateName, Map<String, ?> placeholders);
 
 

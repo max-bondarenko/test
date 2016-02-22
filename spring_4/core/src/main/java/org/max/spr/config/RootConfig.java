@@ -1,4 +1,4 @@
-package org.max.sp.config;
+package org.max.spr.config;
 
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.context.annotation.*;
@@ -22,7 +22,6 @@ public class RootConfig {
         cf.setEnvironment(env);
         return cf;
     }
-
 
     @Override
     public String toString() {

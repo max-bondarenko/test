@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Map;
 
 import static org.junit.Assert.assertNotNull;
@@ -48,6 +49,12 @@ public class InitTest {
         assertTrue(isMethodCall);
     }
 
+    @Test
+    public void testNotDefault() throws Exception {
+        Map query = simpleRepo.findByDate(new Date());
+
+    }
+
     @Configuration
     public static class Conf {
         @Bean
@@ -60,17 +67,12 @@ public class InitTest {
 
                 @Override
                 public String getTemplate(String templateName) {
-                    return null;
+                    return " { asdafsd : 1 , date:${ph1} } ";
                 }
 
                 @Override
                 public Object executeByUrl(String url, HttpMethod method, Class r, Object[] parameters) {
                     isMethodCall = true;
-                    return null;
-                }
-
-                @Override
-                public Object execute(String template) {
                     return null;
                 }
 

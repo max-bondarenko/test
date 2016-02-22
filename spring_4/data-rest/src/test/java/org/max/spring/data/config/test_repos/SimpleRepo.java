@@ -9,7 +9,10 @@ import java.util.Map;
 /**
  * Created by Maksym_Bondarenko on 2/15/2016.
  */
+@DruidQuery
 public interface SimpleRepo extends GetRepository<Map, String> {
     @DruidQuery(dataSource = "wikipedia")
-    Map findQuery(Date weq);
+    Map findByDate(Date weq);
+
+    Map findInQueryAnd(String a1, int a2);
 }
