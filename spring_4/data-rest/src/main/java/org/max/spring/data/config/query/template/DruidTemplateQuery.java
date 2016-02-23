@@ -20,13 +20,12 @@ public class DruidTemplateQuery extends DruidBaseQuery {
     private String ds;
     private PartTree tree;
 
-    public DruidTemplateQuery(QueryBackend backend, PartTree tree, String templateName) {
-        this(backend, tree, templateName, tree.getDataSource());
-
+    public DruidTemplateQuery(QueryBackend backend, PartTree tree, String templateName, Class responseType) {
+        this(backend, tree, templateName, tree.getDataSource(), responseType);
     }
 
-    public DruidTemplateQuery(QueryBackend backend, PartTree tree, String templateName, String ds) {
-        super(backend);
+    public DruidTemplateQuery(QueryBackend backend, PartTree tree, String templateName, String ds, Class responseType) {
+        super(backend, responseType);
         this.tree = tree;
         this.templateName = templateName;
         this.ds = ds;
@@ -41,13 +40,12 @@ public class DruidTemplateQuery extends DruidBaseQuery {
         List<String> names = tree.getPropertyNames();
         Map<String, Object> pl = new HashMap<>();
         pl.put("dataSource", ds);
-
         String name = null;
         int i = 0;
         for (Iterator<String> iterator = names.iterator(); iterator.hasNext(); name = iterator.next(), i++) {
             pl.put(name, parameters[i]);
         }
-        return backend.execute(templateName, pl);
+        return backend.execute(templateName, pl, responseType);
     }
 
     @Override

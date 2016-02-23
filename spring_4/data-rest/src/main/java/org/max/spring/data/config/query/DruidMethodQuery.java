@@ -15,7 +15,7 @@ public class DruidMethodQuery extends DruidBaseQuery {
     private QueryMethod qm;
 
     public DruidMethodQuery(QueryBackend backend, RepositoryMetadata metadata, Method m) {
-        super(backend);
+        super(backend, m.getReturnType());
         this.qm = new QueryMethod(m, metadata);
     }
 

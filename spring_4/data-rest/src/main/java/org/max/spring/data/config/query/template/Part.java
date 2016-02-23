@@ -124,14 +124,6 @@ public class Part {
 
         public static final Collection<String> ALL_KEYWORDS;
 
-        static {
-            List<String> allKeywords = new ArrayList<String>();
-            for (Type type : ALL) {
-                allKeywords.addAll(type.keywords);
-            }
-            ALL_KEYWORDS = Collections.unmodifiableList(allKeywords);
-        }
-
         // Need to list them again explicitly as the order is important
         // (esp. for IS_NULL, IS_NOT_NULL)
         private static final List<Part.Type> ALL = Arrays.asList(IS_NOT_NULL, IS_NULL, BETWEEN, LESS_THAN, LESS_THAN_EQUAL,
@@ -139,6 +131,14 @@ public class Part {
                 NOT_IN, IN, NEAR, WITHIN, REGEX, EXISTS, TRUE, FALSE, NEGATING_SIMPLE_PROPERTY, SIMPLE_PROPERTY);
         private final List<String> keywords;
         private final int numberOfArguments;
+
+        static {
+            List<String> allKeywords = new ArrayList<String>();
+            for (Type type : ALL) {
+                allKeywords.addAll(type.keywords);
+            }
+            ALL_KEYWORDS = Collections.unmodifiableList(allKeywords);
+        }
 
         /**
          * Creates a new {@link Type} using the given keyword, number of arguments to be bound and operator. Keyword and

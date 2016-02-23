@@ -95,8 +95,8 @@ public class RepFactory extends RepositoryFactorySupport implements QueryLookupS
                 templateName = method.getName();
             }
             return StringUtils.isEmpty(dataSource)
-                    ? new DruidTemplateQuery(backend, tree, templateName)
-                    : new DruidTemplateQuery(backend, tree, templateName, dataSource);
+                    ? new DruidTemplateQuery(backend, tree, templateName, method.getReturnType())
+                    : new DruidTemplateQuery(backend, tree, templateName, dataSource, method.getReturnType());
         } else {
             // not annotated method
             // should be parsed by method name //todo
@@ -120,7 +120,6 @@ public class RepFactory extends RepositoryFactorySupport implements QueryLookupS
         }
         return dataSource;
     }
-
 
     private void checkRawType(DruidQuery annotation, Method method) {
         Class<?> rType = method.getReturnType();

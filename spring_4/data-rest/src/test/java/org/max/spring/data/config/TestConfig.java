@@ -47,7 +47,7 @@ public class TestConfig {
             }
 
             @Override
-            public Object execute(String templateName, Map placeholders) {
+            public Object execute(String templateName, Map placeholders, Class respType) {
                 return null;
             }
         };

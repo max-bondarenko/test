@@ -9,9 +9,11 @@ import org.springframework.data.repository.query.RepositoryQuery;
 public abstract class DruidBaseQuery implements RepositoryQuery {
 
     protected QueryBackend backend;
+    protected Class<?> responseType;
 
-    public DruidBaseQuery(QueryBackend backend) {
+    public DruidBaseQuery(QueryBackend backend, Class<?> responseType) {
         this.backend = backend;
+        this.responseType = responseType;
     }
 
 }

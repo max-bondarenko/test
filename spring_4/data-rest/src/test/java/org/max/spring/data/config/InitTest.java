@@ -77,7 +77,7 @@ public class InitTest {
                 }
 
                 @Override
-                public Object execute(String templateName, Map placeholders) {
+                public Object execute(String templateName, Map placeholders, Class restType) {
                     return null;
                 }
             };

@@ -7,8 +7,7 @@ import java.util.Map;
 /**
  * Created by Maksym_Bondarenko on 2/11/2016.
  */
-
-public interface QueryBackend<T> {
+public interface QueryBackend {
     /**
      * Base url for querying.
      *
@@ -18,9 +17,9 @@ public interface QueryBackend<T> {
 
     String getTemplate(String templateName);
 
-    T executeByUrl(String url, HttpMethod method, Class<T> responseType, Object[] parameters);
+    <T> T executeByUrl(String url, HttpMethod method, Class<T> responseType, Object[] parameters);
 
-    T execute(String templateName, Map<String, ?> placeholders);
+    <T> T execute(String templateName, Map<String, ?> placeholders, Class<T> responseType);
 
 
 }

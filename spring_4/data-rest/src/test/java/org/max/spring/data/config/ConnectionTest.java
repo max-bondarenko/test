@@ -1,6 +1,7 @@
 package org.max.spring.data.config;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.max.spring.data.config.test_repos.DefaultBackedRepo;
@@ -15,6 +16,7 @@ import static junit.framework.Assert.assertNotNull;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestConfig.class})
+@Ignore
 public class ConnectionTest {
 
     @Autowired
