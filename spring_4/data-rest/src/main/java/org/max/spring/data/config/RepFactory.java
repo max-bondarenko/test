@@ -21,10 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Factory that actually responsible for creation of Repo or really backs Repo on behind.
@@ -36,7 +33,8 @@ public class RepFactory extends RepositoryFactorySupport implements QueryLookupS
     private static Collection<Class<?>> RAW_TYPES = new LinkedList<>(Arrays.asList(
             String.class,
             InputStream.class,
-            Map.class
+            Map.class,
+            List.class
     ));
     private RestTemplate template;
     // may get from ctx by narrower types
@@ -82,7 +80,6 @@ public class RepFactory extends RepositoryFactorySupport implements QueryLookupS
     public RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, NamedQueries namedQueries) {
         DruidQuery annotation = AnnotationUtils.findAnnotation(method, DruidQuery.class);
         if (annotation != null) {
-            checkRawType(annotation, method);
             PartTree tree = new PartTree(method.getName());
             DruidQuery methodAnn = AnnotationUtils.findAnnotation(method, DruidQuery.class);
             //get data source from parts
@@ -94,6 +91,7 @@ public class RepFactory extends RepositoryFactorySupport implements QueryLookupS
             if (StringUtils.isEmpty(templateName)) {
                 templateName = method.getName();
             }
+
             return StringUtils.isEmpty(dataSource)
                     ? new DruidTemplateQuery(backend, tree, templateName, method.getReturnType())
                     : new DruidTemplateQuery(backend, tree, templateName, dataSource, method.getReturnType());
@@ -119,17 +117,5 @@ public class RepFactory extends RepositoryFactorySupport implements QueryLookupS
             throw new IllegalArgumentException("Empty dataSource name");
         }
         return dataSource;
-    }
-
-    private void checkRawType(DruidQuery annotation, Method method) {
-        Class<?> rType = method.getReturnType();
-        if (annotation.isRaw()) {
-            for (Class aClass : RAW_TYPES) {
-                if (rType.isAssignableFrom(aClass)) {
-                    return;
-                }
-            }
-            throw new IllegalArgumentException();
-        }
     }
 }

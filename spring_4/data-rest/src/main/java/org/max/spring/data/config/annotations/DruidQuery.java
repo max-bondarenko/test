@@ -21,6 +21,4 @@ public @interface DruidQuery {
     String templateName() default "";
 
     String dataSource() default "";
-
-    boolean isRaw() default true;
 }

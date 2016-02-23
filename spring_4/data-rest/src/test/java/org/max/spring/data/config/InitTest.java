@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -66,14 +67,14 @@ public class InitTest {
                 }
 
                 @Override
-                public String getTemplate(String templateName) {
-                    return " { asdafsd : 1 , date:${ph1} } ";
-                }
-
-                @Override
                 public Object executeByUrl(String url, HttpMethod method, Class r, Object[] parameters) {
                     isMethodCall = true;
                     return null;
+                }
+
+                @Override
+                public void validateTemplate(String name, Set<String> placeholders) {
+
                 }
 
                 @Override

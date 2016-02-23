@@ -8,6 +8,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Maksym_Bondarenko on 2/15/2016.
@@ -27,8 +28,8 @@ public class TestConfig {
             }
 
             @Override
-            public String getTemplate(String templateName) {
-                return null;
+            public void validateTemplate(String name, Set<String> placeholders) {
+
             }
 
             @Override

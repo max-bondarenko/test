@@ -9,7 +9,6 @@ import org.max.spring.data.config.query.template.DruidTemplateQuery;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.data.repository.core.RepositoryMetadata;
-import org.springframework.data.repository.query.QueryLookupStrategy;
 import org.springframework.data.repository.query.RepositoryQuery;
 
 import java.lang.reflect.Method;
@@ -24,7 +23,7 @@ public class DruidLookUpStrategyTest {
     @Mock
     QueryBackend backend;
 
-    QueryLookupStrategy test = new RepFactory();
+    RepFactory test = new RepFactory();
 
     @Test
     public void testResolveQueryByAnnotationType() throws Exception {
@@ -44,6 +43,7 @@ public class DruidLookUpStrategyTest {
     private RepositoryQuery base(String name) throws NoSuchMethodException {
         Class<ForMethodTest> t = ForMethodTest.class;
         Method getById = t.getMethod(name, String.class);
+        test.setBackend(backend);
 
         RepositoryQuery repositoryQuery = test.resolveQuery(getById, metaData, null);
 

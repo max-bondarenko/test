@@ -5,6 +5,7 @@ import org.max.spring.data.config.annotations.DruidQuery;
 import org.max.spring.data.config.repository.GetRepository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,6 +13,6 @@ import java.util.Map;
  */
 
 public interface SimpleRepo extends GetRepository<Map, String> {
-    @DruidQuery(dataSource = "wikipedia")
-    Map findQuery(Date weq);
+    @DruidQuery("query1")
+    List<Map> findInWikipediaWithDate(Date weq);
 }

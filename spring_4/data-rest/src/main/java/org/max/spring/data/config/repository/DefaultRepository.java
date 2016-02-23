@@ -16,7 +16,7 @@ public class DefaultRepository<T, ID extends Serializable> implements GetReposit
 
     private Class<T> returnType;
 
-    private QueryBackend<T> backend;
+    private QueryBackend backend;
 
     public DefaultRepository(Class<T> domainType) {
         this.returnType = domainType;
@@ -36,7 +36,7 @@ public class DefaultRepository<T, ID extends Serializable> implements GetReposit
             return (T) linkedHashMap;
         }
         Object[] parameters = new Object[]{id};
-        T ret = backend.executeByUrl(backend.getBaseUrl(), HttpMethod.GET, returnType, parameters);
+        T ret = backend.<T>executeByUrl(backend.getBaseUrl(), HttpMethod.GET, returnType, parameters);
         return ret;
     }
 }
