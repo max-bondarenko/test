@@ -16,12 +16,9 @@ import org.springframework.data.repository.core.support.RepositoryFactorySupport
 import org.springframework.data.repository.query.QueryLookupStrategy;
 import org.springframework.data.repository.query.RepositoryQuery;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 
-import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.*;
 
 /**
  * Factory that actually responsible for creation of Repo or really backs Repo on behind.
@@ -30,19 +27,9 @@ import java.util.*;
 public class RepFactory extends RepositoryFactorySupport implements QueryLookupStrategy {
 
     private static final Logger log = LoggerFactory.getLogger(RepFactory.class);
-    private static Collection<Class<?>> RAW_TYPES = new LinkedList<>(Arrays.asList(
-            String.class,
-            InputStream.class,
-            Map.class,
-            List.class
-    ));
-    private RestTemplate template;
     // may get from ctx by narrower types
     private QueryBackend backend;
 
-    public void setTemplate(RestTemplate template) {
-        this.template = template;
-    }
 
     @Override
     protected void validate(RepositoryMetadata repositoryMetadata) {
