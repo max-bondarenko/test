@@ -17,6 +17,7 @@ import java.util.Map;
 public class DruidTemplateQuery extends DruidBaseQuery {
 
     private static final String DATA_SOURCE = "dataSource";
+
     private String templateName;
     private String ds;
     private PartTree tree;
