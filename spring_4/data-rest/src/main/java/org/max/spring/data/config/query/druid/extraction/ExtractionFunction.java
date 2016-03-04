@@ -17,24 +17,18 @@ public class ExtractionFunction<T extends HasParent, Parent extends T> extends B
         return new TimeFormat<>(b, this);
     }
 
-    ;
-
     public Time<ExtractionFunction<T, ?>, ?> time() {
         return new Time<>(b, this);
     }
 
-    ;
-
     public Simple<ExtractionFunction<T, ?>, ?> regex() {
         b.put("type", "regex");
-        Simple<ExtractionFunction<T, ?>, ExtractionFunction<T, Parent>> ret = new Simple<>(b, this);
-        return ret;
+        return new Simple<>(b, this);
     }
 
     public Simple<ExtractionFunction<T, ?>, ?> partial() {
         b.put("type", "partial");
-        Simple<ExtractionFunction<T, ?>, ExtractionFunction<T, Parent>> ret = new Simple<>(b, this);
-        return ret;
+        return new Simple<>(b, this);
     }
 
 }

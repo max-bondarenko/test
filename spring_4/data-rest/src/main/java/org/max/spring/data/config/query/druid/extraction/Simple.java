@@ -17,6 +17,4 @@ public class Simple<T extends HasParent, Parent extends T> extends Base<Parent> 
         b.put("expr", expr);
         return this;
     }
-
-    ;
 }

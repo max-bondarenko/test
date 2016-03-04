@@ -1,5 +1,7 @@
 package org.max.spring.data.config.query.druid;
 
+import org.max.spring.data.config.query.druid.aggregations.Aggregation;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +18,16 @@ public class Timeseries extends Base<Builder> {
         HashMap<String, Object> v = new HashMap<>();
         b.put("filter", v);
         return new Filter<>(v, this);
+    }
+
+    public Aggregation.Aggregations<Timeseries, ?> aggregations() {
+        HashMap<String, Object> v = new HashMap<>();
+        b.put("aggregation", v);
+        return new Aggregation.Aggregations<>(v, this);
+    }
+
+    public Interval.Intervals<Timeseries, ?> intervals() {
+        return new Interval.Intervals<>(b, this);
     }
 
     public Timeseries dataSource(String ds) {
