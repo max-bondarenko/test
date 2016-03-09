@@ -14,19 +14,19 @@ import java.util.Map;
  * <p/>
  * Created by Maksym_Bondarenko on 2/12/2016.
  */
-public class DruidTemplateQuery extends DruidBaseQuery {
+public class TemplateQuery extends DruidBaseQuery {
 
     private static final String DATA_SOURCE = "dataSource";
 
     private String templateName;
     private String ds;
-    private PartTree tree;
+    private TemplatePartTree tree;
 
-    public DruidTemplateQuery(QueryBackend backend, PartTree tree, String templateName, Class responseType) {
+    public TemplateQuery(QueryBackend backend, TemplatePartTree tree, String templateName, Class responseType) {
         this(backend, tree, templateName, tree.getDataSource(), responseType);
     }
 
-    public DruidTemplateQuery(QueryBackend backend, PartTree tree, String templateName, String ds, Class responseType) {
+    public TemplateQuery(QueryBackend backend, TemplatePartTree tree, String templateName, String ds, Class responseType) {
         super(backend, responseType);
         this.tree = tree;
         this.templateName = templateName;

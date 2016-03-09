@@ -11,14 +11,14 @@ import java.io.Serializable;
 /**
  * Created by Maksym_Bondarenko on 2/5/2016.
  */
-public class RepFactoryBeanSupport<T extends Repository<S, ID>, S, ID extends Serializable> extends RepositoryFactoryBeanSupport<T, S, ID> {
+public class DruidRepositoryFactoryBeanSupport<T extends Repository<S, ID>, S, ID extends Serializable> extends RepositoryFactoryBeanSupport<T, S, ID> {
 
     @Autowired
     private QueryBackend backend;
 
     @Override
     protected RepositoryFactorySupport createRepositoryFactory() {
-        RepFactory repFactory = new RepFactory();
+        DruidRepositoryFactory repFactory = new DruidRepositoryFactory();
         repFactory.setBackend(backend);
         return repFactory;
     }

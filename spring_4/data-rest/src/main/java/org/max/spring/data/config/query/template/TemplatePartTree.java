@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Maksym_Bondarenko on 2/22/2016.
  */
-public class PartTree implements Iterable<PartTree.OrPart> {
+public class TemplatePartTree implements Iterable<TemplatePartTree.OrPart> {
 
     private static final String AND_KEYWORD = "And";
     private static final String OR_KEYWORD = "Or";
@@ -39,11 +39,11 @@ public class PartTree implements Iterable<PartTree.OrPart> {
     private final Subject subject;
 
     /**
-     * Creates a new {@link PartTree} by parsing the given {@link String}.
+     * Creates a new {@link TemplatePartTree} by parsing the given {@link String}.
      *
      * @param source the {@link String} to parse
      */
-    public PartTree(String source) {
+    public TemplatePartTree(String source) {
         Assert.notNull(source, "Source must not be null");
         Matcher matcher = PREFIX_TEMPLATE.matcher(source);
         if (!matcher.find()) {
@@ -79,15 +79,15 @@ public class PartTree implements Iterable<PartTree.OrPart> {
     }
 
     /**
-     * Returns an {@link Iterable} of all parts contained in the {@link PartTree}.
+     * Returns an {@link Iterable} of all parts contained in the {@link TemplatePartTree}.
      *
-     * @return the iterable {@link Part}s
+     * @return the iterable {@link TemplatePart}s
      */
-    public Iterable<Part> getParts() {
+    public Iterable<TemplatePart> getParts() {
 
-        List<Part> result = new ArrayList<Part>();
+        List<TemplatePart> result = new ArrayList<TemplatePart>();
         for (OrPart orPart : this) {
-            for (Part part : orPart) {
+            for (TemplatePart part : orPart) {
                 result.add(part);
             }
         }
@@ -96,7 +96,7 @@ public class PartTree implements Iterable<PartTree.OrPart> {
 
     public List<String> getPropertyNames() {
         List<String> retVal = new LinkedList<>();
-        for (Part part : getParts()) {
+        for (TemplatePart part : getParts()) {
             retVal.add(part.getProperty());
         }
         return retVal;
@@ -107,16 +107,16 @@ public class PartTree implements Iterable<PartTree.OrPart> {
     }
 
     /**
-     * Returns all {@link Part}s of the {@link PartTree} of the given  Type.
+     * Returns all {@link TemplatePart}s of the {@link TemplatePartTree} of the given  Type.
      *
      * @param type
      * @return
      */
-    public Iterable<Part> getParts(Part.Type type) {
+    public Iterable<TemplatePart> getParts(TemplatePart.Type type) {
 
-        List<Part> result = new ArrayList<Part>();
+        List<TemplatePart> result = new ArrayList<TemplatePart>();
 
-        for (Part part : getParts()) {
+        for (TemplatePart part : getParts()) {
             if (part.getType().equals(type)) {
                 result.add(part);
             }
@@ -132,11 +132,11 @@ public class PartTree implements Iterable<PartTree.OrPart> {
 
     /**
      * A part of the parsed source that results from splitting up the resource around {@literal Or} keywords. Consists of
-     * {@link Part}s that have to be concatenated by {@literal And}.
+     * {@link TemplatePart}s that have to be concatenated by {@literal And}.
      */
-    public static class OrPart implements Iterable<Part> {
+    public static class OrPart implements Iterable<TemplatePart> {
 
-        private final List<Part> children = new ArrayList<Part>();
+        private final List<TemplatePart> children = new ArrayList<TemplatePart>();
 
         /**
          * Creates a new {@link OrPart}.
@@ -147,12 +147,12 @@ public class PartTree implements Iterable<PartTree.OrPart> {
             String[] split = split(source, AND_KEYWORD);
             for (String part : split) {
                 if (StringUtils.hasText(part)) {
-                    children.add(new Part(part));
+                    children.add(new TemplatePart(part));
                 }
             }
         }
 
-        public Iterator<Part> iterator() {
+        public Iterator<TemplatePart> iterator() {
             return children.iterator();
         }
 

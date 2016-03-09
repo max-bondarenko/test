@@ -3,8 +3,8 @@ package org.max.spring.data.config;
 import org.max.spring.data.back.QueryBackend;
 import org.max.spring.data.config.annotations.DruidQuery;
 import org.max.spring.data.config.query.DruidMethodQuery;
-import org.max.spring.data.config.query.template.DruidTemplateQuery;
-import org.max.spring.data.config.query.template.PartTree;
+import org.max.spring.data.config.query.template.TemplatePartTree;
+import org.max.spring.data.config.query.template.TemplateQuery;
 import org.max.spring.data.config.repository.DefaultRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +24,9 @@ import java.lang.reflect.Method;
  * Factory that actually responsible for creation of Repo or really backs Repo on behind.
  * Created by Maksym_Bondarenko on 2/11/2016.
  */
-public class RepFactory extends RepositoryFactorySupport implements QueryLookupStrategy {
+public class DruidRepositoryFactory extends RepositoryFactorySupport implements QueryLookupStrategy {
 
-    private static final Logger log = LoggerFactory.getLogger(RepFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(DruidRepositoryFactory.class);
     // may get from ctx by narrower types
     private QueryBackend backend;
 
@@ -67,7 +67,7 @@ public class RepFactory extends RepositoryFactorySupport implements QueryLookupS
     public RepositoryQuery resolveQuery(Method method, RepositoryMetadata metadata, NamedQueries namedQueries) {
         DruidQuery annotation = AnnotationUtils.findAnnotation(method, DruidQuery.class);
         if (annotation != null) {
-            PartTree tree = new PartTree(method.getName());
+            TemplatePartTree tree = new TemplatePartTree(method.getName());
             DruidQuery methodAnn = AnnotationUtils.findAnnotation(method, DruidQuery.class);
             //get data source from parts
             String dataSource = tree.getDataSource();
@@ -80,8 +80,8 @@ public class RepFactory extends RepositoryFactorySupport implements QueryLookupS
             }
 
             return StringUtils.isEmpty(dataSource)
-                    ? new DruidTemplateQuery(backend, tree, templateName, method.getReturnType())
-                    : new DruidTemplateQuery(backend, tree, templateName, dataSource, method.getReturnType());
+                    ? new TemplateQuery(backend, tree, templateName, method.getReturnType())
+                    : new TemplateQuery(backend, tree, templateName, dataSource, method.getReturnType());
         } else {
             // not annotated method
             // should be parsed by method name //todo

@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 /**
  * Created by Maksym_Bondarenko on 2/5/2016.
  */
-public class Registrar extends RepositoryBeanDefinitionRegistrarSupport {
+public class DruidRepositoryFactoryRegistrar extends RepositoryBeanDefinitionRegistrarSupport {
     @Override
     protected Class<? extends Annotation> getAnnotation() {
         return EnableDruidRepositories.class;

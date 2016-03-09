@@ -16,18 +16,18 @@ import java.util.*;
  * @author Oliver Gierke
  * @author Martin Baumgartner
  */
-public class Part {
+public class TemplatePart {
 
     private final String propertyPath;
-    private final Part.Type type;
+    private final TemplatePart.Type type;
 
     /**
-     * Creates a new {@link Part} from the given method name part, the {@link Class} the part originates from and the
+     * Creates a new {@link TemplatePart} from the given method name part, the {@link Class} the part originates from and the
      * start parameter index.
      *
      * @param source must not be {@literal null}.
      */
-    public Part(String source) {
+    public TemplatePart(String source) {
         Assert.hasText(source, "Part source must not be null or emtpy!");
         this.type = Type.fromProperty(source);
         this.propertyPath = type.extractProperty(source);
@@ -60,7 +60,7 @@ public class Part {
     /**
      * @return the type
      */
-    public Part.Type getType() {
+    public TemplatePart.Type getType() {
 
         return type;
     }
@@ -80,7 +80,7 @@ public class Part {
             return false;
         }
 
-        Part that = (Part) obj;
+        TemplatePart that = (TemplatePart) obj;
         return this.propertyPath.equals(that.propertyPath) && this.type.equals(that.type);
     }
 
@@ -126,7 +126,7 @@ public class Part {
 
         // Need to list them again explicitly as the order is important
         // (esp. for IS_NULL, IS_NOT_NULL)
-        private static final List<Part.Type> ALL = Arrays.asList(IS_NOT_NULL, IS_NULL, BETWEEN, LESS_THAN, LESS_THAN_EQUAL,
+        private static final List<TemplatePart.Type> ALL = Arrays.asList(IS_NOT_NULL, IS_NULL, BETWEEN, LESS_THAN, LESS_THAN_EQUAL,
                 GREATER_THAN, GREATER_THAN_EQUAL, BEFORE, AFTER, NOT_LIKE, LIKE, STARTING_WITH, ENDING_WITH, CONTAINING,
                 NOT_IN, IN, NEAR, WITHIN, REGEX, EXISTS, TRUE, FALSE, NEGATING_SIMPLE_PROPERTY, SIMPLE_PROPERTY);
         private final List<String> keywords;
@@ -159,16 +159,16 @@ public class Part {
         }
 
         /**
-         * Returns the {@link Type} of the {@link Part} for the given raw propertyPath. This will try to detect e.g.
+         * Returns the {@link Type} of the {@link TemplatePart} for the given raw propertyPath. This will try to detect e.g.
          * keywords contained in the raw propertyPath that trigger special query creation. Returns {@link #SIMPLE_PROPERTY}
          * by default.
          *
          * @param rawProperty
          * @return
          */
-        public static Part.Type fromProperty(String rawProperty) {
+        public static TemplatePart.Type fromProperty(String rawProperty) {
 
-            for (Part.Type type : ALL) {
+            for (TemplatePart.Type type : ALL) {
                 if (type.supports(rawProperty)) {
                     return type;
                 }
