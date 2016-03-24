@@ -1,0 +1,33 @@
+<configuration>
+
+    <appender name="COMMON" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="TEST" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>  >>>>  %d{HH:mm:ss.SSS} %-5level %logger{30} - %msg%n </pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework.security" level="debug"/>
+    <logger name="org.springframework.core.env" level="debug"/>
+    <!--<logger name="org.springframework.beans.factory" level="debug"/>-->
+    <logger name="org.hibernate" level="info"/>
+    <logger name="org.hibernate.tool.hbm2ddl.SchemaUpdate" level="debug"/>
+
+
+    <logger name="org.max" level="debug" additivity="false">
+        <appender-ref ref="TEST" />
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="COMMON" />
+    </root>
+</configuration>

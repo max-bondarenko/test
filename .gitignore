@@ -1,4 +1,7 @@
+#maven build
 target/
+#idea project
 .idea
+*.ipr
+*.iws
 *.iml
-*.class

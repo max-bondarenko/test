@@ -22,16 +22,21 @@
             <name>Scala-tools Maven2 Repository</name>
             <url>http://scala-tools.org/repo-releases</url>
         </repository>
+
         <repository>
-            <id>milestone.repo.springsource.org</id>
-            <name>repo.springsource.org-milestone</name>
-            <url>https://repo.springsource.org/libs-milestone</url>
+            <id>io.spring.repo.maven.milestone</id>
+            <url>http://repo.spring.io/milestone/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
+
         <repository>
-            <snapshots/>
-            <id>snapshots</id>
-            <name>libs-snapshot-remote</name>
-            <url>http://repo.spring.io/libs-snapshot-remote</url>
+            <id>io.spring.repo.maven.release</id>
+            <url>http://repo.spring.io/release/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
             <id>java.net2</id>
