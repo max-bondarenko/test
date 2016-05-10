@@ -1,6 +1,5 @@
 package org.max.spring.data.config;
 
-import org.max.spring.data.back.QueryBackend;
 import org.max.spring.data.config.annotations.DruidQuery;
 import org.max.spring.data.config.query.DruidMethodQuery;
 import org.max.spring.data.config.query.template.TemplatePartTree;

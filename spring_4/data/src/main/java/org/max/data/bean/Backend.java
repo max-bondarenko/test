@@ -2,7 +2,7 @@ package org.max.data.bean;
 
 import com.google.common.collect.Sets;
 import com.google.common.io.CharStreams;
-import org.max.spring.data.back.QueryBackend;
+import org.max.spring.data.config.QueryBackend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;

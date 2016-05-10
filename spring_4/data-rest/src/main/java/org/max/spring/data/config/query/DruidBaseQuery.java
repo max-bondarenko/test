@@ -1,6 +1,6 @@
 package org.max.spring.data.config.query;
 
-import org.max.spring.data.back.QueryBackend;
+import org.max.spring.data.config.QueryBackend;
 import org.springframework.data.repository.query.RepositoryQuery;
 
 /**

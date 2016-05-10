@@ -1,6 +1,5 @@
 package org.max.spring.data.config;
 
-import org.max.spring.data.back.QueryBackend;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport;

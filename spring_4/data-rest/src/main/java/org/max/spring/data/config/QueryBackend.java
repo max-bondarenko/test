@@ -1,4 +1,4 @@
-package org.max.spring.data.back;
+package org.max.spring.data.config;
 
 import org.springframework.http.HttpMethod;
 

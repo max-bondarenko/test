@@ -1,6 +1,5 @@
 package org.max.sp.security;
 
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,8 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .inMemoryAuthentication().withUser("lima").password("ppp").roles("USER").and()
                 .withUser("kilo").password("ppaa").roles("USER", "ADMIN");
 
+
         auth.ldapAuthentication()
-                .contextSource().root("dc=max,dc=org")
+                .contextSource()
+                .root("dc=max,dc=org")
                 .and()
                 .userDnPatterns("uid={0},ou=people")
                 .groupSearchBase("ou=groups");

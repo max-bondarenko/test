@@ -1,6 +1,6 @@
 package org.max.spring.data.config.repository;
 
-import org.max.spring.data.back.QueryBackend;
+import org.max.spring.data.config.QueryBackend;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.util.Assert;

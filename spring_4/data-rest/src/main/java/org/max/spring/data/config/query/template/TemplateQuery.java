@@ -1,6 +1,6 @@
 package org.max.spring.data.config.query.template;
 
-import org.max.spring.data.back.QueryBackend;
+import org.max.spring.data.config.QueryBackend;
 import org.max.spring.data.config.query.DruidBaseQuery;
 import org.springframework.data.repository.query.QueryMethod;
 
