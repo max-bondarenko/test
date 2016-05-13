@@ -1,7 +1,7 @@
 package org.max.spring.data.config;
 
 import org.max.spring.data.config.annotations.DruidQuery;
-import org.max.spring.data.config.query.DruidMethodQuery;
+import org.max.spring.data.config.query.template.CollectionTemplateQuery;
 import org.max.spring.data.config.query.template.TemplatePartTree;
 import org.max.spring.data.config.query.template.TemplateQuery;
 import org.max.spring.data.config.repository.DefaultRepository;
@@ -17,7 +17,11 @@ import org.springframework.data.repository.query.RepositoryQuery;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
 
 /**
  * Factory that actually responsible for creation of Repo or really backs Repo on behind.
@@ -29,6 +33,10 @@ public class DruidRepositoryFactory extends RepositoryFactorySupport implements 
     // may get from ctx by narrower types
     private QueryBackend backend;
 
+    @SuppressWarnings("unchecked")
+    public static <T> Class<? extends T[]> getArrayClass(Class<T> clazz) {
+        return (Class<? extends T[]>) Array.newInstance(clazz, 0).getClass();
+    }
 
     @Override
     protected void validate(RepositoryMetadata repositoryMetadata) {
@@ -77,15 +85,24 @@ public class DruidRepositoryFactory extends RepositoryFactorySupport implements 
             if (StringUtils.isEmpty(templateName)) {
                 templateName = method.getName();
             }
-
+            //fot collections
+            Class<?> returnType = method.getReturnType();
+            if (Collection.class.isAssignableFrom(returnType)) {
+                Class<?> declaringClass = method.getDeclaringClass();
+                Type type = declaringClass.getGenericInterfaces()[0];
+                if (type instanceof ParameterizedType) {
+                    ParameterizedType y = (ParameterizedType) type;
+                    returnType = getArrayClass((Class) y.getActualTypeArguments()[0]);
+                    return StringUtils.isEmpty(dataSource)
+                            ? new CollectionTemplateQuery(backend, tree, templateName, returnType)
+                            : new CollectionTemplateQuery(backend, tree, templateName, dataSource, returnType);
+                }
+            }
             return StringUtils.isEmpty(dataSource)
-                    ? new TemplateQuery(backend, tree, templateName, method.getReturnType())
-                    : new TemplateQuery(backend, tree, templateName, dataSource, method.getReturnType());
-        } else {
-            // not annotated method
-            // should be parsed by method name //todo
-            return new DruidMethodQuery(backend, metadata, method);
+                    ? new TemplateQuery(backend, tree, templateName, returnType)
+                    : new TemplateQuery(backend, tree, templateName, dataSource, returnType);
         }
+        throw new IllegalArgumentException("Method must be annotated with DruidQuery annotation");
 
     }
 
