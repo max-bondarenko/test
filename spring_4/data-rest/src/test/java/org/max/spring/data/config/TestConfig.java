@@ -1,6 +1,5 @@
 package org.max.spring.data.config;
 
-import org.max.spring.data.back.QueryBackend;
 import org.max.spring.data.config.annotations.EnableDruidRepositories;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

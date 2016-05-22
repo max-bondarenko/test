@@ -1,8 +1,8 @@
 package org.max.spring.data.config.annotations;
 
 
-import org.max.spring.data.config.Registrar;
-import org.max.spring.data.config.RepFactoryBeanSupport;
+import org.max.spring.data.config.DruidRepositoryFactoryBeanSupport;
+import org.max.spring.data.config.DruidRepositoryFactoryRegistrar;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
@@ -16,7 +16,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@Import(Registrar.class)
+@Import(DruidRepositoryFactoryRegistrar.class)
 public @interface EnableDruidRepositories {
 
     @AliasFor("basePackages") String[] value() default {};
@@ -25,7 +25,7 @@ public @interface EnableDruidRepositories {
 
     Class<?>[] basePackageClasses() default {};
 
-    Class<?> repositoryFactoryBeanClass() default RepFactoryBeanSupport.class;
+    Class<?> repositoryFactoryBeanClass() default DruidRepositoryFactoryBeanSupport.class;
 
     ComponentScan.Filter[] includeFilters() default {};
 

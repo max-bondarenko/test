@@ -1,4 +1,4 @@
-package org.max.spring.data.config.query;
+package org.max.spring.data.config.query.builder;
 
 import org.max.spring.data.config.QueryBackend;
 import org.springframework.data.repository.query.RepositoryQuery;

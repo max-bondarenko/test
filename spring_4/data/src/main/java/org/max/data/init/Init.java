@@ -16,7 +16,6 @@ import org.springframework.core.io.ClassPathResource;
 @EnableDruidRepositories(basePackages = {"org.max.data.rep"})
 public class Init {
 
-
     @Bean
     public PropertyPlaceholderConfigurer placeholderHelper() {
         PropertyPlaceholderConfigurer ret = new PropertyPlaceholderConfigurer();
