@@ -7,8 +7,8 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 import org.springframework.jdbc.InvalidResultSetAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import sun.jdbc.odbc.ee.DataSource;
 
+import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,8 +18,11 @@ import java.util.Map;
  */
 public class DbUpdateExample {
     static final String USER_TABLE_NAME = "User";
+    private JdbcTemplate template;
 
-    JdbcTemplate template = new JdbcTemplate(new DataSource());
+    public void setDataSource(DataSource ds){
+        template = new JdbcTemplate(ds);
+    }
 
     public void update(User e) {
         String s = "UPDATE " + USER_TABLE_NAME + " SET ";
