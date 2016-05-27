@@ -10,7 +10,7 @@
     <artifactId>update</artifactId>
 
     <scm>
-        <developerConnection>scm:git:ssh:github.com/max-bondarenko/test_ssh.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/max-bondarenko/test_ssh.git</developerConnection>
     </scm>
 
     <dependencies>
