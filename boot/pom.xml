@@ -68,6 +68,7 @@
                     <pushReleases>false</pushReleases>
                     <pushHotfixes>false</pushHotfixes>
                     <allowUntracked>true</allowUntracked>
+                    <noDeploy>true</noDeploy>
                 </configuration>
             </plugin>
         </plugins>
