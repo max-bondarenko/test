@@ -3,10 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <!--<parent>-->
-        <!--<artifactId>parent</artifactId>-->
-        <!--<groupId>org.max</groupId>-->
-        <!--<version>1.0.0-SNAPSHOT</version>-->
-        <!--<relativePath>../parent/pom.xml</relativePath>-->
+    <!--<artifactId>parent</artifactId>-->
+    <!--<groupId>org.max</groupId>-->
+    <!--<version>1.0.0-SNAPSHOT</version>-->
+    <!--<relativePath>../parent/pom.xml</relativePath>-->
     <!--</parent>-->
     <modelVersion>4.0.0</modelVersion>
 
@@ -53,8 +53,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-        </plugins>
-		 <plugins>
             <plugin>
                 <groupId>external.atlassian.jgitflow</groupId>
                 <artifactId>jgitflow-maven-plugin</artifactId>
@@ -74,9 +72,8 @@
                 </configuration>
             </plugin>
         </plugins>
+
     </build>
-
-
 
 
 </project>
