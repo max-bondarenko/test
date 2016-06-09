@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:annotation-config/>
+
+	<!-- Database -->
+	<jdbc:embedded-database id="datasource" type="H2">
+        <jdbc:script location="script.sql"/>
+	</jdbc:embedded-database>
+
+    <!-- <bean id="h2" class="org.h2.tools.Server" factory-method="createTcpServer" init-method="start"
+           destroy-method="stop">
+         <constructor-arg value="-tcp,-tcpPort, 8043"/>
+     </bean>
+
+     <bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" depends-on="h2">
+         <property name="driverClassName" value="org.h2.Driver"/>
+         <property name="url" value="#{'jdbc:h2:' +  h2.URL + '/' + h2.service.name}"/>
+     </bean>-->
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="datasource" />
+        <property name="packagesToScan" value="com.max.entities"/>
+    </bean>
+
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="datasource" />
+        <property name="persistenceUnitName" value="test" />
+    </bean>
+
+    <import resource="common-context.xml" />
+
+</beans>

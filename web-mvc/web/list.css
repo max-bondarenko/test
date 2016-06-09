@@ -1,0 +1,121 @@
+.search-tree-list {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 0 10px;
+    color: #232323;
+}
+
+.search-tree-list .dropdown-menu {
+    width: 100%;
+}
+
+.search-tree-list .dropdown-menu > div {
+    max-height: 400px;
+    overflow: auto;
+    width: 100%;
+}
+.search-tree-list.dropdown-menu > div {
+    position: relative;
+}
+
+.search-tree-list .dropdown-menu > div ul {
+    padding: 0 0 0 15px;
+    list-style: none outside none;
+}
+
+.search-tree-list .dropdown-menu > div > ul,
+.search-tree-list .dropdown-menu > div > ul li {
+    padding: 0;
+}
+
+.search-tree-list > div:before {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid;
+    content: "";
+    display: block;
+    height: 0;
+    margin-top: -2px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    width: 0;
+}
+
+.search-tree-list.open > div:before {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 0 solid;
+    border-bottom: 4px solid;
+}
+
+.search-tree-list label {
+    min-height: 0 !important;
+    line-height: 24px !important;
+    padding: 0 7px;
+    font-weight: normal;
+}
+
+.search-tree-list .dropdown-menu > label {
+    padding: 0 7px 7px !important;
+    display: block;
+}
+
+.search-tree-list li div {
+    background-color: #eef4f8;
+    border-bottom: 1px solid #fff;
+}
+
+.search-tree-list li.selected div {
+    background-color: #cae6f4;
+}
+
+.search-tree-list .has-child label {
+    padding-right: 32px;
+}
+
+.search-tree-list .has-child.child-hidden > ul {
+    display: none;
+}
+
+.search-tree-list .has-child .arrow {
+    float: right;
+    width: 31px;
+    height: 31px;
+    position: relative;
+    border-left: 1px solid #fff;
+    cursor: pointer !important;
+}
+
+.search-tree-list .has-child .arrow:hover {
+    background-color: #cae6f4;
+}
+
+.search-tree-list .has-child .arrow > span,
+.search-tree-list .has-child.child-hidden .arrow > span {
+    border-left: 4px solid #000;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -4px 0 0 -2px;
+}
+
+.search-tree-list .has-child.child-hidden .arrow > span {
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #000;
+    margin: -2px 0 0 -4px;
+}
+
+.search-tree-list.dropdown.open input {
+    display: block;
+    height: 30px;
+}
+.search-tree-list.dropdown input {
+    display: none;
+}
+
+

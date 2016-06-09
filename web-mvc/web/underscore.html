@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Demo</title>
+</head>
+<body>
+
+<script src="js/underscore.js"></script>
+<script src="js/jq.js"></script>
+<script>
+    (function ($) {
+        $(document).ready(init)
+
+        function init() {
+            $("#button").click(buttonClick)
+
+        }
+
+        function buttonClick(e) {
+//           var templ = $("#templ").clone();
+            $.get('/a/get', function (data) {
+                if (typeof data !== 'object') return;
+
+                var cloned = $("#templ").clone();
+//                _.each( data , function (it) {
+//
+//                })
+                cloned.show();
+                $('body').append(cloned)
+
+
+            })
+        }
+
+    })($);
+
+    //
+    //    var map = _.map([1, 2, 3], function (en) {
+    //        return en + 10;
+    //    });
+    //    _.each(map, function (it) {
+    //        alert(it)
+    //    })
+
+
+</script>
+
+<div id="templ" style="display: none">
+    <div data-id="name"></div>
+    <div data-id="id"></div>
+    <div data-id="2"></div>
+</div>
+
+
+<div id="button" style="height: 100px; width: 100px; display: block">
+    <span>Press </span>
+</div>
+</body>
+</html>
