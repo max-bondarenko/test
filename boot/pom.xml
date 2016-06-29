@@ -60,7 +60,7 @@
                 <version>1.0-m4.3</version>
                 <configuration>
                     <flowInitContext>
-                        <masterBranchName>maseter</masterBranchName>
+                        <masterBranchName>master</masterBranchName>
                         <developBranchName>develop</developBranchName>
                         <releaseBranchPrefix>release-</releaseBranchPrefix>
                         <versionTagPrefix>v</versionTagPrefix>
