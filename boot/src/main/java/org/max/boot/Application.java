@@ -13,9 +13,7 @@ import org.springframework.scheduling.annotation.*;
 @SpringBootApplication
 @Import({
         Configuration.class
-}
-
-)
+})
 @EnableJSONDoc
 @EnableScheduling
 public class Application {

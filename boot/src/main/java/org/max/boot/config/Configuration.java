@@ -37,5 +37,6 @@ public class Configuration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/jsondoc");
         web.ignoring().antMatchers("/static/**");
+        web.ignoring().antMatchers("/*");
     }
 }
