@@ -1,0 +1,4 @@
+jsondoc:
+  packages:
+    - org.max.boot.ctrl
+    - org.max.boot.mod

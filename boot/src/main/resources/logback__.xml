@@ -1,0 +1,37 @@
+<configuration  debug="true" scan="true" scanPeriod="1 second">
+
+    <appender name="COMMON" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="TEST" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>>>>>[%thread] %d{HH:mm:ss.SSS} %-5level %logger{30} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.hibernate" level="info"/>
+
+    <logger name="org.hibernate.tool.hbm2ddl.SchemaUpdate" level="debug"/>
+    <logger name="org.hibernate.cfg.Configuration" level="info"/>
+    <logger name="org.hibernate.SQL" level="debug"/>
+    <logger name="org.hibernate.type" level="trace"/>
+    <!--<logger name="org.hibernate.type.BasicTypeRegistry" level="trace"/>-->
+    <!--<logger name="org.hibernate.pretty" level="trace"/>-->
+    <!--<logger name="org.hibernate.jdbc" level="trace"/>-->
+
+
+    <logger name="org.max" level="debug" additivity="false">
+        <appender-ref ref="TEST"/>
+    </logger>
+
+    <root level="debug">
+        <appender-ref ref="COMMON" />
+    </root>
+</configuration>
