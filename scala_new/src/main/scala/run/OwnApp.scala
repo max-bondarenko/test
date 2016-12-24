@@ -1,6 +1,5 @@
 package run
 
-import scala.collection.mutable.ListBuffer
 
 /**
   * Created by Maksym_Bondarenko on 12/24/2016.
@@ -8,16 +7,14 @@ import scala.collection.mutable.ListBuffer
 trait OwnApp {
   type Ref = () => Unit
 
-  private val initCode = new ListBuffer[Ref]
+  private var initCode: Ref = _
 
-  def ownApp(e: () => Unit)  {
-    initCode +=  e
+  def ownApp(e: () => Unit) {
+    initCode = e
   }
 
   def main(args: Array[String]) {
-    for (a <- initCode) {
-      a()
-    }
+    initCode
 
     Console.println("asdsd")
   }

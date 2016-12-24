@@ -19,4 +19,11 @@ class ExamplesTest extends FunSuite {
     assert( twice == 12.0)
   }
 
+  test("no name"){
+     assert( true == examples.myAssert(() => 3 > 5))
+  }
+  test("by name "){
+     assert( true == examples.myAssertByName(3 > 5))
+  }
+
 }
