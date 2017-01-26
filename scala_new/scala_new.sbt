@@ -8,6 +8,3 @@ lazy val root = (project in file("."))
 resolvers += "Artima Maven" at "http://repo.artima.com/releases"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.+" % "test"
-
-
-

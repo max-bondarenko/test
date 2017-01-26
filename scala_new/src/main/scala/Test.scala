@@ -1,9 +1,11 @@
 
 
 object Test {
+  import  `trait`._
 
   def main(args: Array[String]) {
-    println("Run");
+    val  e = new Example()
+    print(e)
   }
 }
 
