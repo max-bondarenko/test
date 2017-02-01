@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
 jar {
-	baseName = 'mock-client'
+	baseName = 'zipkin-srv'
 	version = '0.0.1-SNAPSHOT'
 }
 
@@ -27,19 +27,14 @@ repositories {
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.cloud:spring-cloud-starter-config')
 	compile('org.springframework.cloud:spring-cloud-starter-eureka')
-	compile('org.springframework.cloud:spring-cloud-starter-feign')
-	compile('org.springframework.cloud:spring-cloud-starter-hystrix')
-	compile('org.springframework.cloud:spring-cloud-starter-zipkin')
-//	compile('org.springframework.cloud:spring-cloud-starter-oauth2')
-	compile('org.springframework.cloud:spring-cloud-starter-stream-rabbit')
-	compile('org.springframework.cloud:spring-cloud-starter-zuul')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')
-	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.cloud:spring-cloud-starter-zipkin')
+	compile('io.zipkin.java:zipkin-server')
 	runtime('com.h2database:h2')
+	runtime('io.zipkin.java:zipkin-autoconfigure-ui')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
